@@ -1,0 +1,12 @@
+import {calculate} from './games';
+import {newRound} from './demo';
+import {simulate} from './simulation';
+import {settle} from './settlement';
+import {GolfTrip} from './product-model';
+import {Player,players,Round} from './types';
+const guestNames=['Alex','Ben','Cole','Drew','Eli','Finn','Gabe','Hank'];
+export function tripPlayers(trip:GolfTrip,history:Round[]):Player[]{return trip.playerIds.map((id,index)=>[...players,...history.flatMap(round=>round.players)].find(player=>player.id===id)??{id,name:guestNames[index-4]??`Player ${index+1}`,handicap:12+index,color:['#e2e6d5','#dde4e4','#e7e2d8'][index%3]})}
+let demoCache:Round[]|null=null;
+function demoResults(trip:GolfTrip):Round[]{if(demoCache)return demoCache;let seed=46341;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};const roster=tripPlayers(trip,[]);demoCache=trip.rounds.flatMap((planned,day)=>Array.from({length:3},(_,group)=>{const base=newRound(),groupPlayers=Array.from({length:4},(_,slot)=>roster[(group*4+slot+day*3)%roster.length]);return simulate({...base,id:`trip-demo-${day}-${group}`,date:`2027-04-${16+day}T12:00:00Z`,course:planned.course,holes:18,players:groupPlayers,games:planned.games,started:true},18,random)}));return demoCache}
+export function tripResults(trip:GolfTrip,history:Round[]){const linked=trip.rounds.flatMap(planned=>{const found=history.find(round=>round.id===planned.linkedRoundId);return found?[found]:[]});return trip.demo?[...demoResults(trip),...linked]:linked}
+export function tripInsights(trip:GolfTrip,history:Round[]){const rounds=tripResults(trip,history),roster=tripPlayers(trip,history);const balances=new Map(roster.map(player=>[player.id,0]));const strokes=new Map(roster.map(player=>[player.id,0]));rounds.forEach(round=>{const money=calculate(round).balances;round.players.forEach((player,index)=>{balances.set(player.id,(balances.get(player.id)??0)+money[index]);strokes.set(player.id,(strokes.get(player.id)??0)+round.results.reduce((sum,hole)=>sum+hole.scores[index],0))})});const ranked=roster.map(player=>({player,balance:Math.round((balances.get(player.id)??0)*100)/100,strokes:strokes.get(player.id)??0})).sort((a,b)=>b.balance-a.balance);const teamStandings=[0,1,2,3].map((team)=>({team:team+1,players:roster.slice(team*3,team*3+3),balance:Math.round(roster.slice(team*3,team*3+3).reduce((sum,player)=>sum+(balances.get(player.id)??0),0)*100)/100})).sort((a,b)=>b.balance-a.balance);const payments=settle(roster.map(player=>balances.get(player.id)??0));return {rounds,ranked,teamStandings,payments,roster}}
