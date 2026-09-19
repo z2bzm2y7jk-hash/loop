@@ -87,3 +87,53 @@
 .discover-page{padding-bottom:100px}.discover-section{margin:32px 0}.discover-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.discover-card{background:#fff;border:1px solid #e3e5dd;border-radius:18px;padding:17px;display:flex;flex-direction:column}.discover-card .game-art{height:54px;width:54px;display:grid;place-items:center;border-radius:13px;margin-bottom:13px;background:#e8eddf;color:#29442c}.discover-card h3{margin:0;font-family:var(--font-serif),Georgia,serif;font-size:1.5rem}.discover-card p{color:#5e6b60;line-height:1.4;flex:1}.discover-tags{display:flex;flex-wrap:wrap;gap:5px}.discover-tags span{font-size:.67rem;background:#f0f2ec;color:#50604f;border-radius:99px;padding:5px 8px}.discover-actions{display:flex;gap:8px;margin-top:15px}.discover-actions button{flex:1;min-height:38px}@media(max-width:800px){.discover-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:550px){.discover-grid{grid-template-columns:1fr}.discover-card{min-height:0}.discover-card .game-art{width:44px;height:44px}}
 .creator-bonuses{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}.creator-bonuses button{display:flex;align-items:center;gap:8px;border:1px solid #d8dfd1;background:#fff;border-radius:999px;padding:10px 14px;color:#243b2d}.creator-bonuses button.selected{background:#eaf1de;border-color:#55704d}
 .member-choices{display:flex;flex-wrap:wrap;gap:7px;width:100%;margin:8px 0}.member-choices button{border:1px solid #d8dfd1;background:#fff;border-radius:999px;padding:8px 12px;font-size:.8rem;color:#243b2d}.member-choices button.selected{background:#263d2c;color:#fff;border-color:#263d2c}
+
+/* Scorecard, course data and game discovery controls share one clear mobile rhythm. */
+.scorecard-panel{border-top:1px solid var(--line);margin-top:32px;padding-top:27px}
+.scorecard-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.scorecard-toolbar h2{font-family:Georgia,'Times New Roman',serif;font-size:29px;font-weight:400}
+.scorecard-toolbar p{color:var(--muted);font-size:12px;margin-top:6px}
+.scorecard-export{background:#fff;min-height:48px;padding-inline:18px;font-size:13px}
+.course-status{display:block;color:#607a55;font-size:9px;font-weight:800;letter-spacing:1.25px;margin-bottom:7px}
+.course-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.course-setup-actions{display:flex;justify-content:flex-end;margin:-3px 0 12px}
+.course-hole-count{margin-bottom:20px}
+.course-layout{border:1px solid var(--line);background:#fff;border-radius:12px;margin-top:24px;padding:0 20px}
+.course-layout>summary{font-weight:600;justify-content:space-between;min-height:60px}
+.course-layout>p{font-size:12px;color:var(--muted);margin:-3px 0 17px}
+.course-hole-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;padding-bottom:20px}
+.course-hole-grid>div{display:grid;grid-template-columns:72px 1fr 1fr;align-items:end;gap:9px;border:1px solid #e3e7de;border-radius:9px;padding:12px}
+.course-hole-grid>div>strong{align-self:center;font-size:12px}
+.course-hole-grid label{font-size:10px;margin:0}
+.course-hole-grid input{min-height:42px;margin-top:5px;padding:8px;text-align:center}
+.random-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-block:26px 22px}
+.random-fields label,.picker-holes{font-size:13px}
+.random-fields input,.random-fields select{min-height:56px;margin-top:9px;padding:14px 15px;font-size:16px}
+.picker-holes .segment{min-height:56px;margin-top:9px}
+.picker-holes .segment button{font-size:15px;font-weight:700}
+.picker-draw{min-height:50px;font-size:13px}
+.caddie-options{gap:12px}
+.caddie-options button{min-height:72px;border-radius:11px;padding:19px 21px;gap:7px}
+.caddie-options button strong{font-size:16px}
+.caddie-options button small{font-size:13px}
+.caddie-options.two button{min-height:68px;font-size:15px;font-weight:600}
+.caddie-lineup{gap:12px}
+.caddie-lineup>div{border:1px solid var(--line);background:#fff;border-radius:11px;padding:14px;grid-template-columns:1.35fr 1fr 90px}
+.caddie-lineup label{font-size:11px}
+.caddie-lineup input,.caddie-lineup select{min-height:48px;font-size:14px;padding:11px 10px}
+
+@media(max-width:760px){
+ .scorecard-toolbar{align-items:flex-start}
+ .scorecard-toolbar h2{font-size:26px}
+ .scorecard-toolbar p{max-width:205px;line-height:1.5}
+ .scorecard-export{min-height:50px;padding-inline:15px}
+ .course-details-grid{grid-template-columns:1fr}
+ .course-hole-grid{grid-template-columns:1fr}
+ .random-picker{padding:24px 20px}
+ .random-fields{grid-template-columns:1fr;gap:18px}
+ .random-fields label:last-child{grid-column:auto}
+ .caddie-options button{min-height:76px}
+ .caddie-lineup>div{grid-template-columns:1fr 90px;gap:10px;padding:15px}
+ .caddie-lineup>div label:first-child{grid-column:1/-1}
+ .caddie-lineup input,.caddie-lineup select{font-size:16px;min-height:52px}
+}

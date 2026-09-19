@@ -4,8 +4,6 @@ import {ArrowLeft,ArrowRight,Check,Shuffle,SlidersHorizontal} from 'lucide-react
 import {gameCatalog} from '@/lib/game-catalog';
 import {CaddieInput,ComplexityPreference,Recommendation,recommendGames,RoundVibe,TeamPreference} from '@/lib/recommendations/gameCaddie';
 import {Game,Player,Round,players as demoPlayers} from '@/lib/types';import {HouseRule} from '@/lib/product-model';import {gameFits} from '@/lib/game-catalog';import {estimateExposure} from '@/lib/games/exposure';import {newRound} from '@/lib/demo';
-
-const demoHandicaps=[9,13,17,21];
 const vibes:{id:RoundVibe;name:string;detail:string}[]=[
   {id:'friendly',name:'Keep it friendly',detail:'Simple rules and less money movement.'},
   {id:'competitive',name:'Competitive',detail:'Balanced games with action throughout.'},
@@ -16,7 +14,7 @@ const vibes:{id:RoundVibe;name:string;detail:string}[]=[
 ];
 const titles=['How many golfers?','How long is the round?','Who is playing?','What kind of round?','Maximum exposure','Keep the rules how simple?','Playing individually or as teams?'];
 const steps=['Players','Holes','Lineup','Vibe','Exposure','Complexity','Teams'];
-function lineupFor(count:number,roster:Player[]){return Array.from({length:count},(_,index)=>roster[index]?{...roster[index],handicap:index<4?demoHandicaps[index]:roster[index].handicap}:{id:`guest-${index}`,name:`Player ${index+1}`,handicap:18,color:'#e2e6d5'})}
+function lineupFor(count:number,roster:Player[]){return Array.from({length:count},(_,index)=>roster[index]?{...roster[index]}:{id:`guest-${index}`,name:`Player ${index+1}`,handicap:18,color:'#e2e6d5'})}
 
 export function GameCaddie({history,roster,onBack,onPlay,onRules,houseRules=[],onPlayRule}:{history:Round[];roster:Player[];onBack:()=>void;onPlay:(recommendation:Recommendation,input:CaddieInput)=>void;onRules:(game:Game)=>void;houseRules?:HouseRule[];onPlayRule?:(rule:HouseRule)=>void}){
   const [step,setStep]=useState(0),[count,setCount]=useState(4),[holes,setHoles]=useState<9|18>(18);

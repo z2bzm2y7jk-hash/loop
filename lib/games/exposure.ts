@@ -1,13 +1,14 @@
 import {gameMetadata} from '../game-catalog';
 import {defaultRules,gameStake} from '../rules';
-import {pars,Round,Game} from '../types';
+import {Round,Game} from '../types';
+import {roundPars} from '../course';
 
 export type Exposure={projectedLow:number;projectedHigh:number;possibleMax:number;assumptions:string[];suggestions:string[]};
 const cents=(value:number)=>Math.round(value*100)/100;
 
 /** Conservative per-player bound for the configured game, assuming the saved base value is used on every hole. */
 export function estimateExposure(round:Round,game:Game):Exposure{
-  const q=round.config.rules??defaultRules();
+  const pars=roundPars(round),q=round.config.rules??defaultRules();
   const count=round.players.length,holes=round.holes,stake=gameStake(round.config,game);
   let possibleMax=0;
   const assumptions:string[]=['An estimate, not an enforced loss cap.'];

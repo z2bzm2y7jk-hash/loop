@@ -1,7 +1,8 @@
 import {wolf} from './wolf';import {hammer} from './hammer';import {vegas} from './vegas';import {sixes} from './sixes';import {gameStake,scoresFor} from '../rules';
-import {Round,Ledger,award,pars} from '../types';
+import {Round,Ledger,award} from '../types';
+import {roundPars} from '../course';
 import {nassau} from './nassau';import {skins} from './skins';import {greenies} from './greenies';import {birdies} from './birdies';
-export function calculate(r:Round){const ledger:Ledger[]=r.games.map(game=>{let b=r.players.map(()=>0);
+export function calculate(r:Round){const pars=roundPars(r),ledger:Ledger[]=r.games.map(game=>{let b=r.players.map(()=>0);
  if(game==='Nassau')b=nassau(r).balances;else if(game==='Skins')b=skins(r).balances;else if(game==='Greenies')b=greenies(r);else if(game==='Birdies')b=birdies(r);
  else if(r.config.rules&&game==='Wolf')b=wolf(r).balances;else if(r.config.rules&&game==='Hammer')b=hammer(r).balances;else if(r.config.rules&&game==='Vegas')b=vegas(r).balances;else if(r.config.rules&&game==='Sixes')b=sixes(r).balances;
  else if(game==='Snake'){const events=r.results.flatMap(h=>h.snakeEvents??(h.snake===null?[]:[h.snake]));if(r.config.rules?.snakeMode==='each')events.forEach(p=>award(b,p,-gameStake(r.config,game)));else{const last=events.at(-1);if(last!==undefined)award(b,last,-gameStake(r.config,game));}}

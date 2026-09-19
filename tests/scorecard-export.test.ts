@@ -7,7 +7,7 @@ describe('scorecard export',()=>{
   const round={...newRound(),holes:9,date:'2026-09-19T12:00:00Z',results:Array.from({length:9},(_,hole)=>({scores:[hole+3,hole+4,hole+5,hole+6],greenie:null,sandies:[],dots:[],snake:null}))};
   const csv=scorecardCsv(round);
   expect(csv).toContain('"Hole 9"');
-  expect(csv).toContain('"Chad","8","3","4","5","6","7","8","9","10","11","63"');
+  expect(csv).toContain('"Bay Hill Club & Lodge","Orlando, Florida","Championship","72.5","138","2026-09-19","9","Chad","8","3","4","5","6","7","8","9","10","11","63"');
  });
 
  it('escapes spreadsheet formulas and quotes in names',()=>{
