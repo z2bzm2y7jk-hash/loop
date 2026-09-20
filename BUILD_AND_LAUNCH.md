@@ -14,9 +14,11 @@ The first customer is the person who organizes a regular foursome or golf trip. 
 
 These are product hypotheses, not proven advantages. Validate them with golfers before investing in broad distribution.
 
-## Where the prototype stands
+## Where the product stands
 
-The local Next.js prototype has 11 games, editable stakes, hole-level Wolf/Hammer/Vegas decisions, scoring, a settlement ledger, a mobile interface, and 39 automated tests. It has no hosted URL, account system, shared rounds, real course data, durable backup, offline guarantee, or production instrumentation. It stores rounds only in each browser's localStorage. A link sent to another phone would not show the same round.
+The Next.js web app now has 12 games, editable stakes, hole-level Wolf/Hammer/Vegas decisions, course and tee lookup, scorecard export, scoring, settlement, group/trip concepts, and a mobile interface. Sixty automated tests cover game engines, flexible rules, discovery, course data, exports, and synchronization contracts. The current public prototype still stores player-created rounds in one browser, so it is useful for product testing but is not yet the shared beta.
+
+The production foundation is now separate from that public prototype: a standalone Node.js build for Hostinger, a pooled MariaDB/MySQL connection, environment validation, health checks, repeatable migrations, a 19-table schema, immutable round snapshots, append-only hole history, hashed invite/session storage, idempotency keys, and revision-based conflict rules. The next sprint connects the interface to these server capabilities and adds the offline queue.
 
 ## Release sequence
 
@@ -79,10 +81,11 @@ Keep a useful core round free. Test a group or organizer subscription for saved 
 
 ## Next build sprint
 
-1. Agree on the narrow beta promise and recruit the first five test groups.
-2. Make a production data model with schema versioning, import/export, and arbitrary-hole correction.
-3. Add course/tee/par/stroke-index entry and an offline-first save path.
-4. Put a private HTTPS preview on phones and run a full on-course round with one group.
-5. Record every confusing rule and payout; fix those before building shared live rounds.
+1. Create the private GitHub repository and connect it to a dedicated Hostinger Node.js site and MariaDB/MySQL database.
+2. Add secure organizer accounts, guest invite links, and server-authorized group roles.
+3. Move round creation, hole saves, revisions, completion, and export behind the versioned API.
+4. Add the IndexedDB command queue, retry behavior, and captain-led conflict resolution.
+5. Run five scripted failure drills: refresh mid-hole, duplicate save, two-phone edit, airplane mode, and database restore.
+6. Recruit the first five test groups and observe setup, play, correction, completion, and settlement without coaching them through the interface.
 
 The private beta is ready when it survives a real round, not merely when its screens look finished.

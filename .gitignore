@@ -4,3 +4,8 @@ out/
 *.tsbuildinfo
 test-results/
 playwright-report/
+.impeccable/
+screenshots/*.jpg.png
+.env
+.env.*
+!.env.example

@@ -1,10 +1,10 @@
 # Loop
 
-**The golf game operating system that helps groups decide what to play, run the game, track the action, and settle up.** Loop is a mobile-first, local prototype. It tracks side games and payments owed; it never collects wagers, holds money, transfers funds, or takes a percentage.
+**The golf game operating system that helps groups decide what to play, run the game, track the action, and settle up.** Loop is a mobile-first web application moving from a local prototype to a private shared-round beta. It tracks side games and payments owed; it never collects wagers, holds money, transfers funds, or takes a percentage.
 
 ## Run and verify
 
-Requires Node.js 20.9+ and npm.
+Requires Node.js 22–24 and npm.
 
 ```sh
 npm install
@@ -12,10 +12,11 @@ npm run dev
 npm run lint
 npm run typecheck
 npm test
+npm run db:check
 npm run build
 ```
 
-Open the local URL reported by `npm run dev` (normally http://localhost:3000). The interface uses a single Next.js App Router page with client-side screens, so no account or backend is needed.
+Open the local URL reported by `npm run dev` (normally http://localhost:3000). The current interface works without an account. The production branch also includes the server runtime, validated environment configuration, pooled MariaDB/MySQL connection, repeatable migrations, and a deployment health endpoint required for the shared beta.
 
 ## A round in the prototype
 
@@ -38,7 +39,7 @@ Enter whole-stroke scores with the large +/- controls, then save each hole. Wolf
 - **Profile:** player records, best partner, toughest opponent, favorite game and head-to-head rivalries.
 - **Future plans:** placeholder pricing architecture; no paywall, checkout, or payment processing.
 
-Active round, history and paid flags persist in browser `localStorage` under `loop-v1`. House Rules, groups and trips persist under `loop-product-v1`. Clearing site data restores demo data. Data stays in that browser, so separate devices do not sync.
+Active round, history and paid flags currently persist in browser `localStorage` under `loop-v1`. House Rules, groups and trips persist under `loop-product-v1`. Clearing site data restores demo data. The new server schema is ready for account, group, round, course, revision, outcome and trip persistence; connecting the interface to those endpoints is the next beta sprint.
 
 ## Architecture
 
@@ -52,11 +53,15 @@ Active round, history and paid flags persist in browser `localStorage` under `lo
 - `lib/insights/*`, `lib/trip-insights.ts`, `lib/recap.ts`, `lib/share-card.ts`: derived group, player, trip and round outputs.
 - `lib/simulation.ts`, `lib/demo-tools.ts`: handicap-weighted demo scores and deliberate test events.
 - `components/*`: guided Caddie, configuration, discovery, group/trip pages and recap.
+- `lib/contracts/*`: validated, versioned requests for conflict-safe round synchronization.
+- `lib/server/*`: server-only environment checks, database pool, and the 19-table production schema.
+- `drizzle/*`: reviewed MariaDB/MySQL migration files.
+- `app/api/v1/health`: deployment and database readiness check.
 
 All game balances are recalculated from saved holes. House Rules store configurations, not a second copy of scoring results. Group/trip insights derive from completed rounds. Local storage has a simple version field but still needs schema validation and migrations for production.
 
-[Game rules and payout assumptions](GAME_RULES.md) documents the supported variants. [Build and launch plan](BUILD_AND_LAUNCH.md) covers a real beta. [Product notes](PRODUCT_NOTES.md) describes positioning, pricing hypotheses, exclusions, and next steps.
+[Game rules and payout assumptions](GAME_RULES.md) documents the supported variants. [Production architecture](PRODUCTION_ARCHITECTURE.md) defines the Hostinger design and trust invariants. [Competitive strategy](COMPETITIVE_STRATEGY.md) covers the market, differentiation, pricing hypotheses, and growth loop. [Build and launch plan](BUILD_AND_LAUNCH.md) covers the beta gates.
 
 ## Current limits
 
-Courses use the included par and handicap layout. Player/group membership and trip creation are local; there are no invitations or live shared edits. Exposure is modeled conservatively and is not enforced as a real loss cap. Custom games can only combine the supported engines, not arbitrary natural-language rules. The production path needs offline storage, shared identity/sync, data migration, more golfer research, accessibility validation, and jurisdiction-specific product review.
+The course finder can locate courses and tees, but production provider licensing and cache policy still need validation. Player/group membership and trip creation remain local until the shared-round endpoints are connected. There are no invitations or live shared edits yet. Exposure is modeled conservatively and is not enforced as a real loss cap. Custom games can only combine the supported engines, not arbitrary natural-language rules. The private beta still needs offline storage, shared identity/sync, data migration, accessibility validation, restore drills, and jurisdiction-specific product review.
