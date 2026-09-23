@@ -9,5 +9,11 @@ export const metadata: Metadata = {
  formatDetection:{telephone:false},
  icons:{icon:[{url:'/icon-192.png',sizes:'192x192',type:'image/png'},{url:'/icon-512.png',sizes:'512x512',type:'image/png'}],apple:[{url:'/apple-touch-icon.png',sizes:'180x180',type:'image/png'}]},
 };
-export const viewport: Viewport = {themeColor:'#203f33',colorScheme:'light'};
+export const viewport: Viewport = {
+ width:'device-width',
+ initialScale:1,
+ viewportFit:'cover',
+ themeColor:'#203f33',
+ colorScheme:'light',
+};
 export default function Layout({children}:{children:React.ReactNode}) { return <html lang="en"><body>{children}</body></html> }
