@@ -67,7 +67,7 @@ export function configurationForExposure(round:Round,game:Game,limit:number,vibe
   setStake(1);
   const upper=estimateExposure(candidate,game).possibleMax;
   const preferred=game==='Vegas'?1:game==='Greenies'?5:game==='Nassau'?5:game==='Match Play'&&q.matchMode==='round'?5:2;
-  const raw=upper>0?Math.min(preferred,limit*.85/upper):preferred;const allowed=raw>=.25?Math.floor(raw*4)/4:Math.floor(raw*100)/100;
-  setStake(Math.max(.01,allowed));
+  const raw=upper>0?Math.min(preferred,limit*.85/upper):preferred;
+  setStake(Math.max(1,Math.floor(raw)));
   return candidate;
 }

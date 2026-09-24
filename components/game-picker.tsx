@@ -12,7 +12,7 @@ export function GamePicker({round,onChange}:{round:Round;onChange:(round:Round)=
  }
  return <>
   <section className="stakes-panel" aria-labelledby="stakes-heading">
-   <div className="stakes-panel-heading"><div><span className="eyebrow">SET YOUR OWN VALUES</span><h2 id="stakes-heading">Bet amounts and rules</h2><p>Enter any amount, including cents. Changes update the payout math automatically.</p></div><span className="beta-access">ALL GAMES UNLOCKED</span></div>
+   <div className="stakes-panel-heading"><div><span className="eyebrow">SET YOUR OWN VALUES</span><h2 id="stakes-heading">Bet amounts and rules</h2><p>Enter a whole-dollar amount. Changes update the payout math automatically.</p></div><span className="beta-access">ALL GAMES UNLOCKED</span></div>
    {round.games.length?<GameSettings round={round} onChange={onChange}/>:<div className="empty">Choose at least one game below, then set its wager here.</div>}
   </section>
   <section className="game-picker-section" aria-labelledby="game-picker-heading">

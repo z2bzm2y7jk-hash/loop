@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {players,defaults,Round} from '../lib/types';
-import {defaultRules} from '../lib/rules';
+import {defaultRules,gameStake} from '../lib/rules';
 import {calculate} from '../lib/games';
 import {sixes} from '../lib/games/sixes';
 import {estimateExposure} from '../lib/games/exposure';
@@ -15,6 +15,7 @@ describe('Game Caddie',()=>{
     const results=recommendGames(input());
     expect(results.length).toBeGreaterThanOrEqual(3);
     expect(results.slice(0,3).every(result=>gameFits(result.game,4,18)&&result.exposure.possibleMax<=20)).toBe(true);
+    expect(results.every(result=>Number.isInteger(gameStake(result.configuration.config,result.game)))).toBe(true);
     expect(new Set(results.slice(0,3).map(result=>result.game)).size).toBe(3);
     expect(results[0].why).toContain('not a hard cap');
   });

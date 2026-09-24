@@ -46,7 +46,7 @@ export function recommendGames(input:CaddieInput,excluded:Game[]=[]):Recommendat
     if(input.vibe==='new')reasons.push(played===0?'Your group has not played it in saved rounds.':'A different option from your usual games.');
     else if(item.teamType==='rotating')reasons.push('Partners change during the round.');
     else if(item.complexity==='simple')reasons.push('The rules stay easy to follow on the course.');
-    reasons.push(`Suggested settings model up to $${exposure.possibleMax.toFixed(2)} per player; this is not a hard cap.`);
+    reasons.push(`Suggested settings model up to $${Math.ceil(exposure.possibleMax)} per player; this is not a hard cap.`);
     return [{game:item.name,score,why:reasons.join(' '),exposure,configuration,metadata:item}];
   }).sort((a,b)=>b.score-a.score||a.game.localeCompare(b.game));
 }

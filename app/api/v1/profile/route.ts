@@ -6,7 +6,7 @@ import {accountFromRow,currentAccount,database} from '@/lib/server/auth';
 import {players,userProfiles,users} from '@/lib/server/db/schema';
 import {jsonBody,problem,validRequestOrigin} from '@/lib/server/http';
 
-const preferences=z.object({defaultHoles:z.union([z.literal(9),z.literal(18)]),defaultWager:z.number().min(0).max(10000),homeCourse:z.string().trim().max(180),distanceUnit:z.enum(['yards','meters']),color:z.string().regex(/^#[0-9a-f]{6}$/i)});
+const preferences=z.object({defaultHoles:z.union([z.literal(9),z.literal(18)]),defaultWager:z.number().int().min(0).max(10000),homeCourse:z.string().trim().max(180),distanceUnit:z.enum(['yards','meters']),color:z.string().regex(/^#[0-9a-f]{6}$/i)});
 const schema=z.object({displayName:z.string().trim().min(2).max(80),handicap:z.coerce.number().min(-10).max(54),preferences});
 
 export async function PATCH(request:Request){
