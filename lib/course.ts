@@ -1,5 +1,20 @@
 import {CourseTee,handicaps,pars,Round} from './types';
 
+const courseNameAliases:Record<string,string>={
+ 'mallards landing golf course at melbourne':'Harbor City Golf Course',
+ 'mallards landing golf course':'Harbor City Golf Course',
+};
+
+export function currentCourseName(name:string){
+ const key=name.trim().toLowerCase().replace(/\s+/g,' ');
+ return courseNameAliases[key]??name;
+}
+
+export function currentRoundCourse(round:Round):Round{
+ const course=currentCourseName(round.course);
+ return course===round.course?round:{...round,course};
+}
+
 export function defaultCourseTee():CourseTee{
  return {name:'Championship',location:'Orlando, Florida',courseRating:72.5,slopeRating:138,pars:[...pars],strokeIndexes:[...handicaps],source:'demo'};
 }

@@ -1,4 +1,5 @@
 import {CourseTee,handicaps,pars} from './types';
+import {currentCourseName} from './course';
 
 const API='https://api.opengolfapi.org/api/v1';
 
@@ -15,15 +16,15 @@ async function read<T>(url:string):Promise<T>{
 
 export async function searchCourses(query:string){
  const data=await read<{courses:CourseSearchResult[]}>(`${API}/courses/search?q=${encodeURIComponent(query.trim())}&limit=8`);
- return data.courses??[];
+ return (data.courses??[]).map(course=>({...course,course_name:currentCourseName(course.course_name)}));
 }
 
 export async function nearbyCourses(latitude:number,longitude:number){
  const data=await read<{courses:CourseSearchResult[]}>(`${API}/courses/search?lat=${latitude.toFixed(6)}&lng=${longitude.toFixed(6)}&radius_mi=25&limit=10`);
- return data.courses??[];
+ return (data.courses??[]).map(course=>({...course,course_name:currentCourseName(course.course_name)}));
 }
 
-export function getCourse(id:string){return read<CourseDetail>(`${API}/courses/${encodeURIComponent(id)}`)}
+export async function getCourse(id:string){const detail=await read<CourseDetail>(`${API}/courses/${encodeURIComponent(id)}`);return {...detail,course_name:currentCourseName(detail.course_name)}}
 
 export function courseTeeFrom(detail:CourseDetail,tee:CourseApiTee):CourseTee{
  const ordered=[...(detail.holes_data??[])].sort((a,b)=>a.number-b.number);

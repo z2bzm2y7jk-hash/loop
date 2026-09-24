@@ -1,10 +1,17 @@
 import {describe,expect,it} from 'vitest';
 import {newRound} from '../lib/demo';
 import {birdies} from '../lib/games/birdies';
-import {roundPars,roundStrokeIndexes} from '../lib/course';
+import {currentCourseName,currentRoundCourse,roundPars,roundStrokeIndexes} from '../lib/course';
 import {courseTeeFrom} from '../lib/course-api';
 
 describe('course and tee data',()=>{
+ it('uses the current Harbor City name for the former Mallards Landing listing',()=>{
+  expect(currentCourseName('Mallards Landing Golf Course At Melbourne')).toBe('Harbor City Golf Course');
+  expect(currentCourseName('Mallards Landing Golf Course')).toBe('Harbor City Golf Course');
+  expect(currentRoundCourse({...newRound(),course:'Mallards Landing Golf Course At Melbourne'}).course).toBe('Harbor City Golf Course');
+  expect(currentCourseName('Bay Hill Club & Lodge')).toBe('Bay Hill Club & Lodge');
+ });
+
  it('drives scoring from the selected tee values',()=>{
   const base=newRound();
   const round={...base,holes:9,tee:{...base.tee!,source:'manual' as const,pars:[5,...base.tee!.pars.slice(1)],strokeIndexes:[1,...base.tee!.strokeIndexes.slice(1)]},games:['Birdies' as const],results:[{scores:[4,5,5,5],greenie:null,sandies:[],dots:[],snake:null}]};
