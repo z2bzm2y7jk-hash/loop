@@ -36,7 +36,9 @@ export async function databaseHealth(){
  try{
   await state.database.$client.query('SELECT 1');
   return {configured:true,reachable:true} as const;
- }catch{
+ }catch(error){
+  const details=error as {code?:unknown;errno?:unknown;syscall?:unknown;address?:unknown;port?:unknown};
+  console.error(JSON.stringify({event:'database_health_failed',code:details.code??'UNKNOWN',errno:details.errno??null,syscall:details.syscall??null,address:details.address??null,port:details.port??null}));
   return {configured:true,reachable:false} as const;
  }
 }
