@@ -16,13 +16,13 @@ npm run db:check
 npm run build
 ```
 
-Open the local URL reported by `npm run dev` (normally http://localhost:3000). The current interface works without an account. The production branch also includes the server runtime, validated environment configuration, pooled MariaDB/MySQL connection, repeatable migrations, and a deployment health endpoint required for the shared beta.
+Open the local URL reported by `npm run dev` (normally http://localhost:3000). The shared beta requires an account and a configured MariaDB/MySQL database. The production branch includes secure sessions, hashed passwords, per-account cloud saves, validated environment configuration, pooled database connections, repeatable migrations, and a deployment health endpoint.
 
 ## A round in the prototype
 
 Home asks **What are we playing today?** Tap **Pick my game** for Game Caddie. Choose 2–8 players, 9/18 holes, names/handicaps, vibe, maximum exposure target, complexity, and team preference. The deterministic engine offers three compatible games and explains why. **Show me 3 more** excludes earlier choices. **Surprise me** selects from the approved three. The Games screen also offers a shorter surprise flow with an exposure target.
 
-A recommendation opens round setup with suggested values. **Use recommended settings** advances to review; **Customize** opens the same editable settings used in direct setup. The exposure range and modeled maximum are planning estimates, not hard caps. Wolf per-hole overrides and edited settings can exceed the model. Review values together before starting.
+A recommendation opens round setup with suggested values. **Bet amounts and rules** appears before the game library and accepts any amount, including cents. **Use recommended settings** advances to review; **Customize** opens the same editable settings used in direct setup. During an active round, **Edit games & bets** changes the game list or values and recalculates recorded holes. The exposure range and modeled maximum are planning estimates, not hard caps. Wolf per-hole overrides and edited settings can exceed the model. Review values together before starting.
 
 Enter whole-stroke scores with the large +/- controls, then save each hole. Wolf partner/lone/blind choices, Hammer offers, Vegas partners, greenies, sandies, dots, and three-putts are recorded per hole when selected. Games shows results and presses; Money shows each game’s balance. Completion opens a recap and share card with final standings, biggest moment, and settlement. Share uses the Web Share API with a generated PNG card when supported, with text or copy fallback. Save card downloads the image locally. **Mark paid** records a reversible local flag only.
 
@@ -37,9 +37,9 @@ Enter whole-stroke scores with the large +/- controls, then save each hole. Wolf
 - **House Rules:** save, play, edit, duplicate, and delete configurations. The Game Creator preview composes supported games and bonuses into a saved House Rule.
 - **Trips:** Myrtle Beach 2027 demo has 12 golfers, three days, nine calculated foursome rounds, standings and net settlement. Create a local trip, define round plans, and attach a completed round.
 - **Profile:** player records, best partner, toughest opponent, favorite game and head-to-head rivalries.
-- **Future plans:** placeholder pricing architecture; no paywall, checkout, or payment processing.
+- **Membership:** all 12 games are unlocked during private beta. Optional secure checkout links can be configured later for Game Captain and Trip Captain plans.
 
-Active round, history and paid flags currently persist in browser `localStorage` under `loop-v1`. House Rules, groups and trips persist under `loop-product-v1`. Clearing site data restores demo data. The new server schema is ready for account, group, round, course, revision, outcome and trip persistence; connecting the interface to those endpoints is the next beta sprint.
+Account preferences, the active round, completed history, House Rules, groups and trips persist in the user’s online account. A small browser cache supports recovery if a save is interrupted. Paid flags record settlement status only; Loop never moves wager money.
 
 ## Architecture
 
@@ -64,4 +64,4 @@ All game balances are recalculated from saved holes. House Rules store configura
 
 ## Current limits
 
-The course finder can locate courses and tees, but production provider licensing and cache policy still need validation. Player/group membership and trip creation remain local until the shared-round endpoints are connected. There are no invitations or live shared edits yet. Exposure is modeled conservatively and is not enforced as a real loss cap. Custom games can only combine the supported engines, not arbitrary natural-language rules. The private beta still needs offline storage, shared identity/sync, data migration, accessibility validation, restore drills, and jurisdiction-specific product review.
+The course finder can locate courses and tees, but production provider licensing and cache policy still need validation. Group invitations and live multi-device round editing are not yet connected. Exposure is modeled conservatively and is not enforced as a real loss cap. Custom games can only combine the supported engines, not arbitrary natural-language rules. Paid checkout links remain unset during the free private beta. Offline round entry, restore drills and jurisdiction-specific product review remain launch work.
