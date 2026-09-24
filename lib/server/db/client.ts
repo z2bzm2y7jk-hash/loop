@@ -12,9 +12,15 @@ type DatabaseState={database:ReturnType<typeof configuredDatabase>};
 const globalDatabase=globalThis as typeof globalThis&{loopDatabase?:DatabaseState};
 
 function createDatabase():DatabaseState|null{
- const {DATABASE_URL}=serverEnvironment();
- if(!DATABASE_URL)return null;
- return {database:configuredDatabase(DATABASE_URL)};
+ const environment=serverEnvironment();
+ let url=environment.DATABASE_URL;
+ if(environment.DB_NAME&&environment.DB_USER&&environment.DB_PASSWORD){
+  const host=environment.DB_HOST==='localhost'?'127.0.0.1':environment.DB_HOST??'127.0.0.1';
+  const port=environment.DB_PORT??3306;
+  url=`mysql://${encodeURIComponent(environment.DB_USER)}:${encodeURIComponent(environment.DB_PASSWORD)}@${host}:${port}/${encodeURIComponent(environment.DB_NAME)}`;
+ }
+ if(!url)return null;
+ return {database:configuredDatabase(url)};
 }
 
 export function databaseState(){
