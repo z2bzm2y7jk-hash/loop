@@ -1,4 +1,5 @@
 import 'server-only';
+import {sql} from 'drizzle-orm';
 import {drizzle} from 'drizzle-orm/mysql2';
 import * as schema from './schema';
 import {serverEnvironment} from '@/lib/server/env';
@@ -34,7 +35,7 @@ export async function databaseHealth(){
  const state=databaseState();
  if(!state)return {configured:false,reachable:false} as const;
  try{
-  await state.database.$client.query('SELECT 1');
+  await state.database.execute(sql`SELECT 1`);
   return {configured:true,reachable:true} as const;
  }catch(error){
   const details=error as {code?:unknown;errno?:unknown;syscall?:unknown;address?:unknown;port?:unknown};
