@@ -280,3 +280,46 @@ footer{color:var(--text-muted)}
 
 .eyebrow{color:#506747}
 .random-picker-heading p{color:var(--text-muted)}
+
+/* Account access and persisted player settings */
+.auth-page{min-height:100dvh;display:grid;grid-template-columns:minmax(320px,.88fr) minmax(420px,1.12fr);padding:0;background:#f5f6ef;color:var(--ink)}
+.auth-story{min-height:100dvh;background:#203f33;color:#f7f7ef;padding:clamp(34px,6vw,84px);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.auth-story::after{content:"18";position:absolute;right:-28px;bottom:-88px;font-family:Georgia,'Times New Roman',serif;font-size:clamp(240px,28vw,470px);line-height:1;color:rgba(255,255,255,.035);pointer-events:none}
+.auth-brand{font-family:Georgia,'Times New Roman',serif;font-size:38px;line-height:1;color:inherit;text-decoration:none;letter-spacing:-2px;font-weight:600}
+.auth-brand>span{color:#a8bd79}
+.auth-story>div{position:relative;z-index:1;max-width:620px;margin-block:72px}
+.auth-story .eyebrow{display:flex;align-items:center;gap:8px;color:#c5d69f;font-size:11px;letter-spacing:1.5px;font-weight:800;margin-bottom:24px}
+.auth-story h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(48px,6vw,88px);line-height:.95;letter-spacing:-3px;font-weight:400}
+.auth-story h1 em{color:#c8d7a8;font-weight:400}
+.auth-story>div>p{max-width:510px;margin-top:26px;font-size:17px;line-height:1.65;color:#d8e0d7}
+.auth-story ul{position:relative;z-index:1;list-style:none;display:grid;gap:12px;padding:0;margin:0;color:#e5ebdf;font-size:13px}
+.auth-story li{display:flex;align-items:center;gap:10px}.auth-story li svg{width:17px;color:#b8cc8f}
+.auth-panel{display:grid;place-items:center;padding:44px clamp(24px,6vw,90px)}
+.auth-card{width:min(100%,580px)}
+.auth-toggle{display:grid;grid-template-columns:1fr 1fr;background:#e6eadf;border-radius:12px;padding:5px;margin-bottom:46px}
+.auth-toggle button{background:transparent;border:0;border-radius:8px;min-height:48px;color:#637066;font-weight:700}
+.auth-toggle button.selected{background:#fff;color:#203f33;box-shadow:0 3px 12px rgba(31,52,42,.08)}
+.auth-heading>span{color:#617b54;font-size:10px;font-weight:800;letter-spacing:1.45px}
+.auth-heading h2{font-family:Georgia,'Times New Roman',serif;font-size:clamp(35px,4vw,50px);line-height:1.05;font-weight:400;letter-spacing:-1.6px;margin:12px 0}
+.auth-heading p{color:var(--muted);line-height:1.55;margin-bottom:30px}
+.auth-card form{display:grid;gap:18px}.auth-row{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(120px,.6fr);gap:14px}
+.auth-card label,.account-settings label{display:grid;gap:8px;font-size:12px;font-weight:700;color:#35453a}
+.auth-card input,.account-settings input,.account-settings select{width:100%;min-height:54px;border:1px solid #d2d9ce;border-radius:9px;background:#fff;padding:13px 14px;color:var(--ink)}
+.password-field{display:grid;grid-template-columns:1fr 52px;border:1px solid #d2d9ce;border-radius:9px;background:#fff;overflow:hidden}
+.password-field input{border:0;border-radius:0}.password-field button{border:0;border-left:1px solid #e1e5dd;background:transparent;color:#526358;min-height:52px;display:grid;place-items:center}.password-field svg{width:19px}
+.auth-submit{min-height:56px;margin-top:5px;border:0;border-radius:9px;background:#203f33;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800;font-size:14px}.auth-submit svg{width:18px}.auth-submit:disabled{opacity:.65}
+.auth-error{margin:0;color:#9c2f2f;background:#f7e9e6;border:1px solid #efd0ca;border-radius:8px;padding:11px 13px;font-size:12px;line-height:1.45}
+.auth-fine{color:#747e76;font-size:11px;line-height:1.55;margin-top:18px;text-align:center}
+.auth-loading{min-height:100dvh;display:grid;place-content:center;text-align:center;gap:18px;background:#f5f6ef;color:#203f33}.auth-loading .auth-brand{font-size:52px}.auth-loading p{color:var(--muted);font-size:13px}
+.account-settings{border:1px solid #d8dfd3;background:#f6f8f1;border-radius:14px;padding:22px;margin:22px 0 28px}
+.account-settings-title{display:flex;align-items:center;gap:13px;margin-bottom:20px}.account-settings-title>span{display:grid;place-items:center;width:43px;height:43px;border-radius:10px;background:#203f33;color:#fff}.account-settings-title svg{width:20px}.account-settings-title strong,.account-settings-title small{display:block}.account-settings-title strong{font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:400}.account-settings-title small{font-size:11px;color:var(--muted);margin-top:3px}
+.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.settings-wide{grid-column:1/-1}.color-input{display:flex;align-items:center;gap:11px;min-height:54px;border:1px solid #d2d9ce;border-radius:9px;background:#fff;padding:8px 12px}.color-input input{width:38px;height:38px;min-height:38px;border:0;padding:0;background:transparent}.color-input span{font-size:12px;color:var(--muted)}
+.settings-save{margin-top:17px}.settings-message{display:flex;align-items:center;gap:8px;margin:13px 0 0;color:#476d42;font-size:12px;font-weight:700}.settings-message svg{width:16px}
+.password-settings{border-top:1px solid #dbe1d7;margin-top:20px;padding-top:16px}.password-settings summary{display:flex;align-items:center;gap:8px;min-height:44px;font-size:12px;font-weight:800;cursor:pointer}.password-settings summary svg{width:17px}.password-settings form{display:grid;grid-template-columns:1fr 1fr auto;align-items:end;gap:12px;padding-top:13px}.password-settings .secondary{min-height:54px}
+.logout-button{border:0;background:transparent;color:#8b3f37;display:flex;align-items:center;gap:8px;min-height:44px;padding:10px 0;margin-top:10px;font-size:12px;font-weight:800}.logout-button svg{width:17px}
+
+@media(max-width:760px){
+ .auth-page{display:block;padding:0}.auth-story{min-height:300px;padding:30px 22px 34px;justify-content:flex-start}.auth-story>div{margin:55px 0 18px}.auth-story h1{font-size:49px;letter-spacing:-2.3px}.auth-story>div>p{font-size:14px;margin-top:18px}.auth-story ul{display:none}.auth-story::after{font-size:240px;bottom:-66px}
+ .auth-panel{display:block;padding:30px 20px 48px}.auth-toggle{margin-bottom:31px}.auth-heading h2{font-size:37px}.auth-row{grid-template-columns:1fr}.auth-card input{font-size:16px}
+ .account-settings{margin-inline:-2px;padding:19px 16px}.settings-grid{grid-template-columns:1fr}.settings-wide{grid-column:auto}.password-settings form{grid-template-columns:1fr}.password-settings .secondary{width:100%}
+}

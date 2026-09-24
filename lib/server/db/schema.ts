@@ -1,5 +1,8 @@
 import {bigint,boolean,datetime,decimal,index,int,json,mysqlEnum,mysqlTable,primaryKey,timestamp,tinyint,uniqueIndex,varchar} from 'drizzle-orm/mysql-core';
 import type {CourseSnapshot,HolePayload,RoundOutcomeSnapshot} from '@/lib/contracts/round-sync';
+import type {AccountPreferences} from '@/lib/account';
+import type {Round} from '@/lib/types';
+import type {ProductData} from '@/lib/product-model';
 
 const id=(name:string)=>varchar(name,{length:36});
 const createdAt=()=>timestamp('created_at',{mode:'date'}).defaultNow().notNull();
@@ -14,6 +17,22 @@ export const users=mysqlTable('users',{
  status:mysqlEnum('status',['active','disabled','deleted']).default('active').notNull(),
  createdAt:createdAt(),updatedAt:updatedAt(),
 },table=>[uniqueIndex('users_email_unique').on(table.email)]);
+
+export const userProfiles=mysqlTable('user_profiles',{
+ userId:id('user_id').primaryKey().references(()=>users.id,{onDelete:'cascade'}),
+ handicap:decimal('handicap',{precision:4,scale:1}).default('0.0').notNull(),
+ preferences:json('preferences').$type<AccountPreferences>().notNull(),
+ createdAt:createdAt(),updatedAt:updatedAt(),
+});
+
+export const userAppData=mysqlTable('user_app_data',{
+ userId:id('user_id').primaryKey().references(()=>users.id,{onDelete:'cascade'}),
+ activeRound:json('active_round').$type<Round|null>(),
+ history:json('history').$type<Round[]>().notNull(),
+ productData:json('product_data').$type<ProductData>().notNull(),
+ revision:int('revision',{unsigned:true}).default(0).notNull(),
+ createdAt:createdAt(),updatedAt:updatedAt(),
+});
 
 export const sessions=mysqlTable('sessions',{
  id:id('id').primaryKey(),

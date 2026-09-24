@@ -1,0 +1,21 @@
+'use client';
+import {useState,type FormEvent} from 'react';
+import {ArrowRight,CheckCircle2,Eye,EyeOff,Flag} from 'lucide-react';
+import type {Account} from '@/lib/account';
+
+export function AccountAccess({onAuthenticated}:{onAuthenticated:(account:Account)=>void}){
+ const [mode,setMode]=useState<'login'|'register'>('register');
+ const [showPassword,setShowPassword]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const [form,setForm]=useState({displayName:'',email:'',password:'',handicap:'18'});
+ async function submit(event:FormEvent){
+  event.preventDefault();setBusy(true);setError('');
+  try{
+   const body=mode==='register'?{...form,handicap:Number(form.handicap)}:{email:form.email,password:form.password};
+   const response=await fetch(`/api/v1/auth/${mode==='register'?'register':'login'}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
+   const result=await response.json() as {account?:Account;error?:string};
+   if(!response.ok||!result.account)throw new Error(result.error||'Something went wrong.');
+   onAuthenticated(result.account);
+  }catch(cause){setError(cause instanceof Error?cause.message:'Something went wrong.')}finally{setBusy(false)}
+ }
+ return <main className="auth-page"><section className="auth-story"><a className="auth-brand" href="#" onClick={event=>event.preventDefault()}>loop<span>.</span></a><div><span className="eyebrow"><Flag size={14}/> PRIVATE BETA</span><h1>Your group.<br/><em>Your rules.</em><br/>Your round.</h1><p>Keep the score, settle every side game, and remember what happened long after the last putt.</p></div><ul><li><CheckCircle2/> One scorecard for the whole game</li><li><CheckCircle2/> Handicaps and preferences saved</li><li><CheckCircle2/> No money moves through Loop</li></ul></section><section className="auth-panel"><div className="auth-card"><div className="auth-toggle" role="tablist"><button type="button" className={mode==='register'?'selected':''} onClick={()=>{setMode('register');setError('')}}>Create account</button><button type="button" className={mode==='login'?'selected':''} onClick={()=>{setMode('login');setError('')}}>Sign in</button></div><div className="auth-heading"><span>{mode==='register'?'JOIN THE ROUND':'WELCOME BACK'}</span><h2>{mode==='register'?'Build your Loop.':'Pick up where you left off.'}</h2><p>{mode==='register'?'Create your private beta account in under a minute.':'Your rounds and preferences are waiting.'}</p></div><form onSubmit={submit}>{mode==='register'&&<div className="auth-row"><label>First and last name<input autoComplete="name" required minLength={2} maxLength={80} value={form.displayName} onChange={e=>setForm({...form,displayName:e.target.value})} placeholder="Jordan Taylor"/></label><label>Handicap index<input type="number" inputMode="decimal" step="0.1" min="-10" max="54" required value={form.handicap} onChange={e=>setForm({...form,handicap:e.target.value})}/></label></div>}<label>Email<input type="email" autoComplete="email" required maxLength={254} value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="you@example.com"/></label><label>Password<span className="password-field"><input type={showPassword?'text':'password'} autoComplete={mode==='register'?'new-password':'current-password'} required minLength={mode==='register'?10:1} maxLength={128} value={form.password} onChange={e=>setForm({...form,password:e.target.value})} placeholder={mode==='register'?'At least 10 characters':'Your password'}/><button type="button" aria-label={showPassword?'Hide password':'Show password'} onClick={()=>setShowPassword(value=>!value)}>{showPassword?<EyeOff/>:<Eye/>}</button></span></label>{error&&<p className="auth-error" role="alert">{error}</p>}<button className="auth-submit" disabled={busy}>{busy?'One moment…':mode==='register'?'Create my account':'Sign in'} {!busy&&<ArrowRight/>}</button></form><p className="auth-fine">Private friend testing. Your password is encrypted, and your golf data stays with your account.</p></div></section></main>
+}
