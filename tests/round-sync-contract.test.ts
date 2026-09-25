@@ -1,5 +1,6 @@
 import {describe,expect,it} from 'vitest';
-import {roundChangesQuerySchema,saveHoleCommandSchema} from '../lib/contracts/round-sync';
+import {createSharedRoundSchema,roundChangesQuerySchema,saveHoleCommandSchema,sharedHoleCommandSchema} from '../lib/contracts/round-sync';
+import {newRound} from '../lib/demo';
 
 const validCommand={
  commandId:'11111111-1111-4111-8111-111111111111',
@@ -23,5 +24,11 @@ describe('round synchronization contract',()=>{
 
  it('coerces an incremental-sync revision from the URL query',()=>{
   expect(roundChangesQuerySchema.parse({afterRevision:'12'}).afterRevision).toBe(12);
+ });
+
+ it('validates a shared round and its conflict-safe score update',()=>{
+  const round={...newRound(),started:true,results:[{scores:[4,5,4,6],greenie:null,sandies:[],dots:[],snake:null}]};
+  expect(createSharedRoundSchema.parse({round,scope:'view'}).scope).toBe('view');
+  expect(sharedHoleCommandSchema.parse({...validCommand,holeNumber:1,round}).round.results).toHaveLength(1);
  });
 });

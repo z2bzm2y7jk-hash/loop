@@ -41,6 +41,10 @@ Enter whole-stroke scores with the large +/- controls, then save each hole. Wolf
 
 Account preferences, the active round, completed history, House Rules, groups and trips persist in the user’s online account. A small browser cache supports recovery if a save is interrupted. Paid flags record settlement status only; Loop never moves wager money.
 
+An active round receives the first position on Home with hole progress, live balances, and direct Continue, Share, and End Round actions. Ending early requires a reason and an explicit group decision: save the partial score and current bet balances to history, or discard the round so it contributes nothing to records or stats.
+
+Live sharing creates an expiring round link. Captain scoring is the recommended default and gives everyone else an automatically refreshed read-only scorecard. Captains can instead create a group-scoring link. Every accepted hole save uses an expected revision, rejects stale conflicting updates, and records the account, time, hole, and editor color in the activity feed. Hostinger-compatible polling fetches only changes after the phone’s last accepted revision and pauses while the page is in the background.
+
 ## Architecture
 
 - `app/page.tsx`: client screen routing and round state; `app/globals.css`: mobile/desktop styling.
@@ -64,4 +68,4 @@ All game balances are recalculated from saved holes. House Rules store configura
 
 ## Current limits
 
-The course finder can locate courses and tees, but production provider licensing and cache policy still need validation. Group invitations and live multi-device round editing are not yet connected. Exposure is modeled conservatively and is not enforced as a real loss cap. Custom games can only combine the supported engines, not arbitrary natural-language rules. Paid checkout links remain unset during the free private beta. Offline round entry, restore drills and jurisdiction-specific product review remain launch work.
+The course finder can locate courses and tees, but production provider licensing and cache policy still need validation. Live links currently require each tester to sign in, and weak-service offline command queuing remains launch work. Exposure is modeled conservatively and is not enforced as a real loss cap. Custom games can only combine the supported engines, not arbitrary natural-language rules. Paid checkout links remain unset during the free private beta. Restore drills and jurisdiction-specific product review remain launch work.

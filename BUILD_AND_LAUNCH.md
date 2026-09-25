@@ -16,7 +16,7 @@ These are product hypotheses, not proven advantages. Validate them with golfers 
 
 ## Where the product stands
 
-The Next.js web app now has 12 games, editable stakes, hole-level Wolf/Hammer/Vegas decisions, course and tee lookup, scorecard export, scoring, settlement, group/trip concepts, and a mobile interface. Sixty automated tests cover game engines, flexible rules, discovery, course data, exports, and synchronization contracts. The current public prototype still stores player-created rounds in one browser, so it is useful for product testing but is not yet the shared beta.
+The Next.js web app now has 12 games, editable stakes, hole-level Wolf/Hammer/Vegas decisions, course and tee lookup, scorecard export, scoring, settlement, early-round cancellation, live shared scorecards, group/trip concepts, and a mobile interface. Sixty-five automated tests cover game engines, flexible rules, discovery, course data, exports, lifecycle decisions, and synchronization contracts. Account data and shared-round revisions are stored in the hosted database.
 
 The production foundation is now separate from that public prototype: a standalone Node.js build for Hostinger, a pooled MariaDB/MySQL connection, environment validation, health checks, repeatable migrations, a 19-table schema, immutable round snapshots, append-only hole history, hashed invite/session storage, idempotency keys, and revision-based conflict rules. The next sprint connects the interface to these server capabilities and adds the offline queue.
 
