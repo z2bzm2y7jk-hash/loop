@@ -63,7 +63,24 @@ Incoming WebSocket connections are not supported on managed Web/Cloud hosting. T
 ### Reuse and planning
 
 - `house_rules`: versioned saved configurations
+- `group_events`: one weekly game for a local group, including date, course, attendance, default House Rule and finalization state
+- `group_event_pods`: the two-to-four-player on-course groups beneath an event, each linked to its own live round
 - `trips`, `trip_members` and `trip_rounds`: multi-round planning and standings
+
+### Weekly local-group model
+
+A recurring local group is not one oversized round. It is a permanent roster with a different attendance list each week. A weekly `group_event` divides the attending golfers into playable pods while retaining a single event identity for the combined leaderboard and records.
+
+- 4 attendees become one foursome.
+- 5–8 attendees become two balanced pods, avoiding a one-player pod.
+- 9 attendees become three threesomes.
+- 10 attendees become 4–3–3.
+- 11 attendees become 4–4–3.
+- 12 attendees become three foursomes.
+
+Each pod has its own live scorecard, captain or shared-edit policy, revision history and invite. The event applies one compatible House Rule to every pod and rolls completed pod results into event-wide Stableford, Quota, skins, proximity prizes or season points. A pod game such as Wolf, Vegas or Sixes settles within that pod unless the event rules explicitly define a separate group-wide prize.
+
+An event cannot finalize until every expected pod is complete or the organizer marks a pod withdrawn. Finalization freezes the event leaderboard and settlement snapshots while preserving the existing per-hole audit history.
 
 ## API shape
 

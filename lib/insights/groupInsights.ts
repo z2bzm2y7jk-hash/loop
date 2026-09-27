@@ -20,7 +20,10 @@ function seededGroupRounds(){
 
 export function groupRounds(group:GolfGroup,history:Round[]){
   const memberIds=new Set(group.memberIds);
-  const actual=history.filter(round=>round.players.length===memberIds.size&&round.players.every(player=>memberIds.has(player.id)));
+  // A club round belongs in the group history when its entire playing group came
+  // from the club roster. Requiring the full roster here made a 12-person club
+  // appear to have no history when it played as three separate foursomes.
+  const actual=history.filter(round=>round.players.length>=2&&round.players.every(player=>memberIds.has(player.id)));
   const demo=group.demo?seededGroupRounds():[];
   return [...actual,...demo.filter(round=>!actual.some(saved=>saved.id===round.id))].sort((a,b)=>b.date.localeCompare(a.date));
 }
