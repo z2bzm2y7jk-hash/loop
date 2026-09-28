@@ -1,9 +1,9 @@
 'use client';
 
-import {ArrowLeft,ArrowRight,BookOpen,Check,ChevronDown,CircleHelp,CloudRain,DollarSign,Download,Flag,House,PencilLine,ShieldCheck,Smartphone,Users} from 'lucide-react';
+import {ArrowLeft,ArrowRight,BookmarkCheck,BookOpen,Check,ChevronDown,CircleHelp,CloudRain,Crown,DollarSign,Download,Flag,House,PencilLine,ShieldCheck,Smartphone,Users} from 'lucide-react';
 import type {ReactNode} from 'react';
 
-type HelpCenterProps={onBack:()=>void;onStartRound:()=>void;onGroups:()=>void;onGames:()=>void};
+type HelpCenterProps={onBack:()=>void;onStartRound:()=>void;onGroups:()=>void;onGames:()=>void;onHouseRules:()=>void};
 
 function HelpTopic({id,icon,title,summary,children,open=false}:{id:string;icon:ReactNode;title:string;summary:string;children:ReactNode;open?:boolean}){
  return <details className="help-topic" id={id} open={open}><summary><span className="help-topic-icon" aria-hidden="true">{icon}</span><span><strong>{title}</strong><small>{summary}</small></span><ChevronDown className="help-chevron" size={20} aria-hidden="true"/></summary><div className="help-topic-body">{children}</div></details>;
@@ -11,7 +11,7 @@ function HelpTopic({id,icon,title,summary,children,open=false}:{id:string;icon:R
 
 function StepList({children}:{children:ReactNode}){return <ol className="help-steps">{children}</ol>}
 
-export function HelpCenter({onBack,onStartRound,onGroups,onGames}:HelpCenterProps){
+export function HelpCenter({onBack,onStartRound,onGroups,onGames,onHouseRules}:HelpCenterProps){
  return <div className="help-page">
   <button className="text-button help-back" onClick={onBack}><ArrowLeft size={17}/> Back to Loop</button>
   <section className="help-hero"><span className="help-hero-icon" aria-hidden="true"><CircleHelp size={27}/></span><div><p className="help-kicker">Help &amp; how-to</p><h1>New to Loop? Start here.</h1><p>Loop keeps score, tracks friendly side games, and does the math. It never moves money.</p></div></section>
@@ -23,10 +23,34 @@ export function HelpCenter({onBack,onStartRound,onGroups,onGames}:HelpCenterProp
    <article><span>3</span><div><strong>Score together</strong><p>One person can keep score, or the captain can allow trusted players to help.</p></div></article>
   </div></section>
 
-  <div className="help-quick-actions" aria-label="Quick actions"><button className="primary" onClick={onStartRound}><Flag size={17}/> Start a round</button><button className="secondary" onClick={onGroups}><Users size={17}/> Open my groups</button><button className="secondary" onClick={onGames}><BookOpen size={17}/> Browse games</button></div>
+  <section className="help-captain-intro" aria-labelledby="captain-meaning"><span aria-hidden="true"><Crown size={24}/></span><div><h2 id="captain-meaning">What does “captain” mean?</h2><p>The captain is the group’s setup leader. You do not need special technology skills. You choose the regular golfers, prepare the home game, make the lineup, and send one link. You can keep scoring control or let trusted golfers help.</p><p><strong>The captain does not handle payments through Loop.</strong> Loop only keeps the score and explains what each player owes.</p></div></section>
+
+  <div className="help-quick-actions" aria-label="Quick actions"><button className="primary" onClick={onStartRound}><Flag size={17}/> Start a round</button><button className="secondary" onClick={onGroups}><Users size={17}/> Open my groups</button><button className="secondary" onClick={onHouseRules}><BookmarkCheck size={17}/> Saved home games</button><button className="secondary" onClick={onGames}><BookOpen size={17}/> Browse games</button></div>
 
   <section className="help-topics" aria-labelledby="help-topics-title"><div className="section-heading help-section-heading"><div><h2 id="help-topics-title">Step-by-step help</h2><p>Tap a topic to open it.</p></div></div>
-   <HelpTopic id="help-start-round" icon={<Flag/>} title="Start a round" summary="Course, players, games, and bet amounts" open><StepList>
+
+   <HelpTopic id="help-home-game" icon={<BookmarkCheck/>} title="Save your group’s home game" summary="Set it up once, then reuse it any day or week" open><p className="help-plain-definition"><strong>Loop calls this a House Rule.</strong> Think of it as a saved recipe for your usual golf game: which games you play, how many holes, the whole-dollar amounts, and options such as presses or carryovers.</p><StepList>
+    <li><span>1</span><p>Open <strong>Saved home games</strong>, then tap <strong>Create saved home game</strong>.</p></li>
+    <li><span>2</span><p>Give it a familiar name, such as <strong>Thursday Nine</strong>, <strong>Saturday Nassau</strong>, or <strong>Daily Skins</strong>.</p></li>
+    <li><span>3</span><p>Choose the usual number of players and whether the group normally plays 9 or 18 holes.</p></li>
+    <li><span>4</span><p>Choose one or more games. Set the rules and whole-dollar amounts the group normally uses.</p></li>
+    <li><span>5</span><p>Read the preview, then tap <strong>Save home game</strong>. The setup is now saved to your account.</p></li>
+    <li><span>6</span><p>Next time, open <strong>Saved home games</strong> and tap <strong>Play</strong>. Check that day’s course, players, handicaps, and amounts before starting.</p></li>
+   </StepList><p className="help-tip"><strong>Daily, weekly, or occasional all work.</strong> Saving a home game does not create a schedule. It simply keeps the setup ready whenever the group wants to use it.</p></HelpTopic>
+
+   <HelpTopic id="help-captain" icon={<Crown/>} title="Run a regular group as captain" summary="Save the roster, plan the day, and share one link"><p className="help-plain-definition">A <strong>group</strong> is your regular list of golfers. A <strong>weekly game</strong> is one day on the calendar. The same group can play every day, every week, once a month, or only when people are available.</p><StepList>
+    <li><span>1</span><p>Open <strong>Groups</strong>. Under <strong>Start another group</strong>, enter a name such as Thursday Nine, choose at least two golfers, and tap <strong>Add group</strong>.</p></li>
+    <li><span>2</span><p>Open the group’s <strong>Players</strong> tab. Add regulars and guests with their handicaps. The saved roster can hold up to 24 golfers.</p></li>
+    <li><span>3</span><p>Create a <strong>saved home game</strong> for the group if you have not already. This prevents the captain from rebuilding the same games and amounts each time.</p></li>
+    <li><span>4</span><p>Open <strong>This week</strong>, then <strong>Plan this week</strong>. Choose the date, course, saved home game, and the 4–12 golfers playing that day.</p></li>
+    <li><span>5</span><p>Tap <strong>Build playing groups</strong>. Loop divides the golfers into groups of two to four. Use <strong>Shuffle groups</strong>, or tap one golfer and then another to swap them.</p></li>
+    <li><span>6</span><p>Tap <strong>Invite group</strong>. Choose <strong>Follow the weekly game</strong> if only you should organize and score. Choose <strong>Help organize and score</strong> if trusted golfers may help.</p></li>
+    <li><span>7</span><p>Send the link by text or another app. Each golfer opens the same link, signs in, and chooses their own name.</p></li>
+    <li><span>8</span><p>When a playing group is ready, tap <strong>Set up this group</strong>. Confirm the course, players, home game, and dollar amounts before starting its scorecard.</p></li>
+    <li><span>9</span><p>For the next outing, tap <strong>Plan another week</strong>. Loop remembers the group’s last course and home game; change either one whenever needed.</p></li>
+   </StepList><div className="help-captain-checklist"><h3>Captain’s quick check before play</h3><ul><li>Are the correct golfers selected?</li><li>Do the course, tees, handicaps, games, and dollar amounts look right?</li><li>Does everyone know who is entering scores?</li><li>Should the link allow viewing only, or trusted organizers too?</li></ul></div></HelpTopic>
+
+   <HelpTopic id="help-start-round" icon={<Flag/>} title="Start a one-time round" summary="Course, players, games, and bet amounts"><StepList>
     <li><span>1</span><p>Tap <strong>Start a round</strong>.</p></li><li><span>2</span><p>Choose the course and tees. Check the rating, slope, and hole information before continuing.</p></li><li><span>3</span><p>Check every player’s name and handicap. Add or remove players as needed.</p></li><li><span>4</span><p>Choose the games. Enter the whole-dollar bet amounts your group agreed to.</p></li><li><span>5</span><p>Read the review screen to the group, then tap <strong>Start round</strong>.</p></li>
    </StepList><p className="help-tip"><strong>Good habit:</strong> Agree on every game, rule, and dollar amount before the first tee shot.</p></HelpTopic>
 
@@ -57,7 +81,7 @@ export function HelpCenter({onBack,onStartRound,onGroups,onGames}:HelpCenterProp
   </section>
 
   <section className="help-words" aria-labelledby="help-words-title"><div className="help-words-heading"><House size={21}/><h2 id="help-words-title">Words you may see</h2></div><dl>
-   <div><dt>Captain</dt><dd>The person who starts sharing and controls the group link.</dd></div><div><dt>Scoring access</dt><dd>Permission to enter or correct scores. Loop records who made shared changes.</dd></div><div><dt>House Rule</dt><dd>A saved set of games, rules, and dollar amounts your group can reuse.</dd></div><div><dt>Net score</dt><dd>A golf score adjusted by handicap strokes.</dd></div><div><dt>Press</dt><dd>A new Nassau bet that begins during the round.</dd></div><div><dt>Carryover</dt><dd>A tied prize that moves to the next hole.</dd></div>
+   <div><dt>Captain</dt><dd>The group’s setup leader. The captain keeps the roster, plans the day, sends the link, and chooses who may enter scores.</dd></div><div><dt>Scoring access</dt><dd>Permission to enter or correct scores. Loop records who made shared changes.</dd></div><div><dt>House Rule</dt><dd>Loop’s name for a saved home-game recipe: the games, rules, length, and dollar amounts your group can reuse.</dd></div><div><dt>Net score</dt><dd>A golf score adjusted by handicap strokes.</dd></div><div><dt>Press</dt><dd>A new Nassau bet that begins during the round.</dd></div><div><dt>Carryover</dt><dd>A tied prize that moves to the next hole.</dd></div>
   </dl></section>
   <button className="help-finish primary" onClick={onBack}>I’m ready to use Loop <ArrowRight size={17}/></button>
  </div>;

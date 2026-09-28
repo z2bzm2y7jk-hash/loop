@@ -37,7 +37,7 @@ Enter whole-stroke scores with the large +/- controls, then save each hole. Wolf
 - **House Rules:** save, play, edit, duplicate, and delete configurations. The Game Creator preview composes supported games and bonuses into a saved House Rule.
 - **Trips:** Myrtle Beach 2027 demo has 12 golfers, three days, nine calculated foursome rounds, standings and net settlement. Create a local trip, define round plans, and attach a completed round.
 - **Profile:** player records, best partner, toughest opponent, favorite game and head-to-head rivalries.
-- **Help & how-to:** plain-language, step-by-step guidance for setup, scoring, shared groups, bets, corrections, exports, and adding Loop to a phone’s Home Screen.
+- **Help & how-to:** plain-language, step-by-step guidance for setup, scoring, shared groups, bets, corrections, exports, adding Loop to a phone’s Home Screen, saving a reusable home game, and running a regular group as captain.
 - **Membership:** all 12 games are unlocked during private beta. Optional secure checkout links can be configured later for Game Captain and Trip Captain plans.
 
 Account preferences, the active round, completed history, House Rules, groups and trips persist in the user’s online account. A small browser cache supports recovery if a save is interrupted. Paid flags record settlement status only; Loop never moves wager money.
