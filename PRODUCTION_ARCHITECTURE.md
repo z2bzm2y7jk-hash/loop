@@ -99,6 +99,7 @@ The event carries one House Rule snapshot. Pod setup keeps only games compatible
 - `PUT /api/v1/group-events/:id` — conflict-safe organizer lineup update
 - `POST /api/v1/group-events/:id/claim` — bind the current account to an unclaimed roster golfer
 - `POST /api/v1/group-events/:id/pods/:podId/rounds` — atomically create and link a pod scorecard
+- `DELETE /api/v1/group-events/:id/invite` — captain-only revocation of the current weekly-event link
 
 All endpoints require an authenticated user session; non-owners also present a matching scoped round or weekly-event invite. Rate limits apply by session, round or event, and IP.
 

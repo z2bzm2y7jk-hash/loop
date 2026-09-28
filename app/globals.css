@@ -232,6 +232,7 @@ body{min-width:320px;text-rendering:optimizeLegibility}
 button,input,select{min-height:var(--control-min)}
 button{touch-action:manipulation}
 .shared-weekly-hero>.shared-weekly-state{position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px;margin:0;color:#d5e5bd;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.event-activity>h2{font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:400;margin:0 0 8px;color:var(--ink)}
+.stop-sharing-link{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;margin:9px auto 0;background:transparent;color:#825044;font-size:11px}.stop-sharing-confirm{margin-top:12px;padding:14px;border:1px solid #dfcdc2;border-radius:10px;background:#f7f0eb}.stop-sharing-confirm p{font-size:11px;line-height:1.5;color:#664d3c;margin:0}.stop-sharing-confirm p strong{display:block;font-size:12px;margin-bottom:3px}.stop-sharing-confirm .feature-actions{margin-top:12px}.stop-link-action{color:#825044!important;border-color:#d8bfb1!important}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline-color:var(--action-focus)}
 .positive{color:var(--status-positive)}
 ::-webkit-scrollbar{width:10px;height:10px}

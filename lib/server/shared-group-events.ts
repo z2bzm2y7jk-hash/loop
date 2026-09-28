@@ -106,6 +106,14 @@ export async function claimSharedWeeklyPlayer(account:Account,token:string|null,
  return {kind:'ok' as const,current:await readSharedWeeklyEvent(eventId,account.id,token)};
 }
 
+export async function revokeSharedWeeklyInvite(account:Account,token:string|null,eventId:string){
+ if(!token)return {kind:'forbidden' as const};
+ const db=database(),events=await db.select({owner:groupEvents.createdByUserId}).from(groupEvents).where(and(eq(groupEvents.id,eventId),isNull(groupEvents.deletedAt))).limit(1);
+ if(events[0]?.owner!==account.id)return {kind:'forbidden' as const};
+ const revokedAt=new Date(),updated=await db.update(groupEventInvites).set({revokedAt}).where(and(eq(groupEventInvites.eventId,eventId),eq(groupEventInvites.tokenHash,hashGroupEventInviteToken(token)),gt(groupEventInvites.expiresAt,revokedAt),isNull(groupEventInvites.revokedAt)));
+ return affectedRows(updated)===1?{kind:'ok' as const}:{kind:'missing' as const};
+}
+
 export async function updateSharedWeeklyEvent(account:Account,token:string|null,eventId:string,expectedRevision:number,event:SharedWeeklySnapshot['event']){
  const access=await authorizeSharedWeeklyEvent(eventId,account.id,token);if(!access||!access.canEdit)return {kind:'forbidden' as const};
  if(access.event.revision!==expectedRevision)return {kind:'conflict' as const,current:await readSharedWeeklyEvent(eventId,account.id,token)};
