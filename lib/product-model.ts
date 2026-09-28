@@ -1,7 +1,9 @@
-import type {Config,Game,Round} from './types';
+import type {Config,Game,Player,Round} from './types';
 
 export type HouseRule={id:string;name:string;games:Game[];holes:9|18;playerCount?:number;config:Config;groupId?:string;createdAt:string;source?:'saved'|'creator'};
-export type GolfGroup={id:string;name:string;memberIds:string[];createdAt:string;demo?:boolean};
+export type GroupEventPod={id:string;playerIds:string[];linkedRoundId?:string;withdrawnAt?:string};
+export type GroupEvent={id:string;date:string;course:string;attendeeIds:string[];pods:GroupEventPod[];houseRuleId?:string;status:'planned'|'active'|'complete';createdAt:string};
+export type GolfGroup={id:string;name:string;memberIds:string[];createdAt:string;demo?:boolean;homeCourse?:string;defaultHouseRuleId?:string;players?:Player[];events?:GroupEvent[]};
 export type TripRound={id:string;day:number;course:string;games:Game[];linkedRoundId?:string};
 export type GolfTrip={id:string;name:string;startDate:string;playerIds:string[];rounds:TripRound[];demo?:boolean};
 export type ProductData={version:1;houseRules:HouseRule[];groups:GolfGroup[];trips:GolfTrip[]};
