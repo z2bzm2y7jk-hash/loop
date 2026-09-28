@@ -36,6 +36,8 @@ Incoming WebSocket connections are not supported on managed Web/Cloud hosting. T
 8. Changing a saved House Rule never alters an earlier round.
 9. Guest links store only a hash of the secret token and can expire or be revoked.
 10. Logs and analytics exclude player names, wager values, balances and invite tokens.
+11. Weekly-event lineup updates require the expected prior revision and preserve an append-only event snapshot history.
+12. A playing group can link only one empty scorecard whose course, roster and event identity match the shared weekly-event snapshot.
 
 ## Initial data model
 
@@ -63,8 +65,9 @@ Incoming WebSocket connections are not supported on managed Web/Cloud hosting. T
 ### Reuse and planning
 
 - `house_rules`: versioned saved configurations
-- `group_events`: one weekly game for a local group, including date, course, attendance, default House Rule and finalization state
-- `group_event_pods`: the two-to-four-player on-course groups beneath an event, each linked to its own live round
+- `group_events`: one weekly game for a local group, with a revisioned JSON snapshot of its date, course, attendance, House Rule, two-to-four-player pods and linked rounds
+- `group_event_invites`: hashed, expiring weekly-event links with view or organize scope
+- `group_event_revisions`: append-only snapshots identifying each accepted lineup or round-link change
 - `trips`, `trip_members` and `trip_rounds`: multi-round planning and standings
 
 ### Weekly local-group model
@@ -78,9 +81,9 @@ A recurring local group is not one oversized round. It is a permanent roster wit
 - 11 attendees become 4–4–3.
 - 12 attendees become three foursomes.
 
-Each pod has its own live scorecard, captain or shared-edit policy, revision history and invite. The event applies one compatible House Rule to every pod and rolls completed pod results into event-wide Stableford, Quota, skins, proximity prizes or season points. A pod game such as Wolf, Vegas or Sixes settles within that pod unless the event rules explicitly define a separate group-wide prize.
+Each pod has its own live scorecard and round revision history. One weekly-event link authorizes every linked scorecard: view scope follows the lineup and live rounds, while organize scope can swap golfers before play, start a pod and enter scores. Each account may claim one roster identity, and the server prevents two accounts from claiming the same golfer.
 
-An event cannot finalize until every expected pod is complete or the organizer marks a pod withdrawn. Finalization freezes the event leaderboard and settlement snapshots while preserving the existing per-hole audit history.
+The event carries one House Rule snapshot. Pod setup keeps only games compatible with that pod size and asks the organizer to replace anything incompatible. Pod games settle inside their own scorecard; completed pod balances feed the event's combined-money standing. The server derives planned, active and complete state from linked scorecards and keeps lineups immutable once scoring starts.
 
 ## API shape
 
@@ -91,8 +94,13 @@ An event cannot finalize until every expected pod is complete or the organizer m
 - `POST /api/v1/rounds/:id/complete` — validate and create immutable outcome
 - `POST /api/v1/rounds/:id/reopen` — captain-only audited correction
 - `GET /api/v1/rounds/:id/export` — portable scorecard data
+- `POST /api/v1/group-events` — persist a weekly-event snapshot and create a scoped invite
+- `GET /api/v1/group-events/:id` — fetch the current event, pod states and recent activity
+- `PUT /api/v1/group-events/:id` — conflict-safe organizer lineup update
+- `POST /api/v1/group-events/:id/claim` — bind the current account to an unclaimed roster golfer
+- `POST /api/v1/group-events/:id/pods/:podId/rounds` — atomically create and link a pod scorecard
 
-All mutating endpoints require an authenticated user session or a scoped guest-round session. Rate limits apply by session, round and IP.
+All endpoints require an authenticated user session; non-owners also present a matching scoped round or weekly-event invite. Rate limits apply by session, round or event, and IP.
 
 ## Offline save flow
 

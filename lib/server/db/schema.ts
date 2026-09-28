@@ -3,6 +3,7 @@ import type {CourseSnapshot,HolePayload,RoundOutcomeSnapshot} from '@/lib/contra
 import type {AccountPreferences} from '@/lib/account';
 import type {Round} from '@/lib/types';
 import type {ProductData} from '@/lib/product-model';
+import type {SharedWeeklySnapshot} from '@/lib/contracts/group-event-sync';
 
 const id=(name:string)=>varchar(name,{length:36});
 const createdAt=()=>timestamp('created_at',{mode:'date'}).defaultNow().notNull();
@@ -54,9 +55,10 @@ export const groups=mysqlTable('groups',{
 export const groupMembers=mysqlTable('group_members',{
  groupId:id('group_id').notNull().references(()=>groups.id,{onDelete:'cascade'}),
  userId:id('user_id').notNull().references(()=>users.id,{onDelete:'cascade'}),
+ playerId:varchar('player_id',{length:80}),
  role:mysqlEnum('role',['owner','admin','member']).default('member').notNull(),
  joinedAt:createdAt(),
-},table=>[primaryKey({columns:[table.groupId,table.userId]}),index('group_members_user_idx').on(table.userId)]);
+},table=>[primaryKey({columns:[table.groupId,table.userId]}),uniqueIndex('group_members_player_unique').on(table.groupId,table.playerId),index('group_members_user_idx').on(table.userId)]);
 
 export const players=mysqlTable('players',{
  id:id('id').primaryKey(),
@@ -140,6 +142,38 @@ export const roundInvites=mysqlTable('round_invites',{
  createdByUserId:id('created_by_user_id').notNull().references(()=>users.id),
  createdAt:createdAt(),
 },table=>[uniqueIndex('round_invites_token_unique').on(table.tokenHash),index('round_invites_round_idx').on(table.roundId)]);
+
+export const groupEvents=mysqlTable('group_events',{
+ id:id('id').primaryKey(),
+ localGroupId:id('local_group_id').notNull().references(()=>groups.id,{onDelete:'cascade'}),
+ createdByUserId:id('created_by_user_id').notNull().references(()=>users.id),
+ snapshot:json('snapshot').$type<SharedWeeklySnapshot>().notNull(),
+ status:mysqlEnum('status',['planned','active','complete']).default('planned').notNull(),
+ revision:int('revision',{unsigned:true}).default(1).notNull(),
+ createdAt:createdAt(),updatedAt:updatedAt(),
+ deletedAt:datetime('deleted_at',{mode:'date'}),
+},table=>[index('group_events_creator_idx').on(table.createdByUserId),index('group_events_group_date_idx').on(table.localGroupId,table.createdAt)]);
+
+export const groupEventInvites=mysqlTable('group_event_invites',{
+ id:id('id').primaryKey(),
+ eventId:id('event_id').notNull().references(()=>groupEvents.id,{onDelete:'cascade'}),
+ tokenHash:varchar('token_hash',{length:64}).notNull(),
+ scope:mysqlEnum('scope',['view','organize']).default('view').notNull(),
+ expiresAt:datetime('expires_at',{mode:'date'}).notNull(),
+ revokedAt:datetime('revoked_at',{mode:'date'}),
+ createdByUserId:id('created_by_user_id').notNull().references(()=>users.id),
+ createdAt:createdAt(),
+},table=>[uniqueIndex('group_event_invites_token_unique').on(table.tokenHash),index('group_event_invites_event_idx').on(table.eventId)]);
+
+export const groupEventRevisions=mysqlTable('group_event_revisions',{
+ id:bigint('id',{mode:'number',unsigned:true}).autoincrement().primaryKey(),
+ eventId:id('event_id').notNull().references(()=>groupEvents.id,{onDelete:'cascade'}),
+ revision:int('revision',{unsigned:true}).notNull(),
+ action:mysqlEnum('action',['created','lineup','status','round-linked','details']).notNull(),
+ snapshot:json('snapshot').$type<SharedWeeklySnapshot>().notNull(),
+ savedByUserId:id('saved_by_user_id').references(()=>users.id,{onDelete:'set null'}),
+ savedAt:datetime('saved_at',{mode:'date'}).notNull(),
+},table=>[uniqueIndex('group_event_revisions_event_revision_unique').on(table.eventId,table.revision),index('group_event_revisions_event_idx').on(table.eventId)]);
 
 export const holeResults=mysqlTable('hole_results',{
  roundId:id('round_id').notNull().references(()=>rounds.id,{onDelete:'cascade'}),

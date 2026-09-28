@@ -47,6 +47,10 @@ export function hashRoundInviteToken(token:string){
  return createHash('sha256').update(`${token}.round-invite.${serverEnvironment().AUTH_SECRET??''}`).digest('hex');
 }
 
+export function hashGroupEventInviteToken(token:string){
+ return createHash('sha256').update(`${token}.group-event-invite.${serverEnvironment().AUTH_SECRET??''}`).digest('hex');
+}
+
 export async function createSession(userId:string){
  const token=randomBytes(32).toString('base64url');
  const expiresAt=new Date(Date.now()+SESSION_DAYS*24*60*60*1000);

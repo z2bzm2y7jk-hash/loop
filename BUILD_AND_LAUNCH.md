@@ -16,9 +16,9 @@ These are product hypotheses, not proven advantages. Validate them with golfers 
 
 ## Where the product stands
 
-The Next.js web app now has 12 games, editable stakes, hole-level Wolf/Hammer/Vegas decisions, course and tee lookup, scorecard export, scoring, settlement, early-round cancellation, live shared scorecards, group/trip concepts, and a mobile interface. Sixty-five automated tests cover game engines, flexible rules, discovery, course data, exports, lifecycle decisions, and synchronization contracts. Account data and shared-round revisions are stored in the hosted database.
+The Next.js web app now has 12 games, editable stakes, hole-level Wolf/Hammer/Vegas decisions, course and tee lookup, scorecard export, scoring, settlement, early-round cancellation, live shared scorecards, shared weekly events, group/trip concepts, and a mobile interface. Weekly-event links support view or organizer access, roster identity claims, pre-round lineup changes, one live scorecard per playing group, activity history and combined-money results. Eighty-two automated tests cover game engines, flexible rules, discovery, course data, exports, lifecycle decisions, and round and weekly-event synchronization contracts. Account data, shared-round revisions and weekly-event snapshots are stored in the hosted database.
 
-The production foundation is now separate from that public prototype: a standalone Node.js build for Hostinger, a pooled MariaDB/MySQL connection, environment validation, health checks, repeatable migrations, a 19-table schema, immutable round snapshots, append-only hole history, hashed invite/session storage, idempotency keys, and revision-based conflict rules. The next sprint connects the interface to these server capabilities and adds the offline queue.
+The production foundation is now separate from that public prototype: a standalone Node.js build for Hostinger, a pooled MariaDB/MySQL connection, environment validation, health checks, repeatable migrations, a 24-table schema, immutable round and weekly-event snapshots, append-only revision history, hashed invite/session storage, idempotency keys, and revision-based conflict rules. Shared rounds and weekly events use these server capabilities; broader local-data migration and the offline queue remain.
 
 ## Release sequence
 
@@ -40,7 +40,7 @@ Build a hosted HTTPS mobile web beta first so a golfer can open it by link witho
 
 Add a server and group identity only when the single-phone round is trusted. Use a round invite link with guest access, clear captain/editing permissions, live read-only status for everyone, and conflict-safe updates. Store every saved-hole revision so two phones cannot silently overwrite one another. Keep account creation optional until someone wants long-term history.
 
-After a round, generate a recap that is easy to share with the group. Hide monetary figures in outward-facing previews unless the organizer explicitly chooses to include them. Let the group save its rules as a template, then start the next outing from that template.
+For larger recurring groups, one weekly-event link should open the lineup and every playing group's live scorecard. Viewers follow progress; trusted organizers can adjust an unstarted lineup, launch pod scorecards and enter scores. After a round, generate a recap that is easy to share with the group. Hide monetary figures in outward-facing previews unless the organizer explicitly chooses to include them. Let the group save its rules as a template, then start the next outing from that template.
 
 **Exit test:** groups can invite every player, finish a round despite intermittent network access, settle without math disputes, and start a second round with their saved lineup and rules.
 
@@ -82,7 +82,7 @@ Keep a useful core round free. Test a group or organizer subscription for saved 
 ## Next build sprint
 
 1. Create the private GitHub repository and connect it to a dedicated Hostinger Node.js site and MariaDB/MySQL database.
-2. Add secure organizer accounts, guest invite links, and server-authorized group roles.
+2. Finish organizer account recovery and add invite revocation and management for round and weekly-event links.
 3. Move round creation, hole saves, revisions, completion, and export behind the versioned API.
 4. Add the IndexedDB command queue, retry behavior, and captain-led conflict resolution.
 5. Run five scripted failure drills: refresh mid-hole, duplicate save, two-phone edit, airplane mode, and database restore.

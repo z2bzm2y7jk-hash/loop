@@ -2,14 +2,16 @@ import 'server-only';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {and,asc,desc,eq,gt,isNull} from 'drizzle-orm';
 import type {Account} from '@/lib/account';
-import type {CourseSnapshot,HolePayload,RoundActivity,SharedRoundResponse} from '@/lib/contracts/round-sync';
+import {sharedRoundOpenForScoring,type CourseSnapshot,type HolePayload,type RoundActivity,type SharedRoundResponse} from '@/lib/contracts/round-sync';
 import {defaultCourseTee} from '@/lib/course';
 import type {Config,Hole,Round} from '@/lib/types';
-import {database,hashRoundInviteToken} from './auth';
-import {holeResults,holeRevisions,roundGames,roundInvites,roundPlayers,rounds,userProfiles,users} from './db/schema';
+import {database,hashGroupEventInviteToken,hashRoundInviteToken} from './auth';
+import {groupEventInvites,groupEvents,holeResults,holeRevisions,roundGames,roundInvites,roundPlayers,rounds,userProfiles,users} from './db/schema';
 
 type InviteScope='view'|'score'|'captain';
-type StoredConfig=Config&{__loop?:{presses:Round['presses'];paid:string[];date:string;started:boolean}};
+type StoredConfig=Config&{__loop?:{presses:Round['presses'];paid:string[];date:string;started:boolean;groupId?:string;groupEventId?:string;groupPodId?:string}};
+
+function storedConfig(round:Round):StoredConfig{return {...round.config,__loop:{presses:round.presses,paid:round.paid,date:round.date,started:!!round.started,groupId:round.groupId,groupEventId:round.groupEventId,groupPodId:round.groupPodId}}}
 
 function courseSnapshot(round:Round):CourseSnapshot{
  const tee=round.tee??defaultCourseTee();
@@ -31,11 +33,11 @@ export async function createSharedRound(account:Account,round:Round,scope:'view'
  const existing=await db.select({owner:rounds.createdByUserId}).from(rounds).where(eq(rounds.id,round.id)).limit(1);
  if(existing[0]&&existing[0].owner!==account.id)throw new Error('ROUND_ID_IN_USE');
  if(!existing[0]){
-  const snapshot=courseSnapshot(round),storedConfig:StoredConfig={...round.config,__loop:{presses:round.presses,paid:round.paid,date:round.date,started:!!round.started}};
+  const snapshot=courseSnapshot(round),savedConfig=storedConfig(round);
   await db.transaction(async tx=>{
    await tx.insert(rounds).values({id:round.id,createdByUserId:account.id,status:round.ended?'archived':round.started?'active':'draft',playedOn:new Date(round.date),holes:round.holes,courseSnapshot:snapshot,revision:round.results.length,startedAt:round.started?new Date(round.date):null});
    await tx.insert(roundPlayers).values(round.players.map((player,seatIndex)=>({roundId:round.id,seatIndex,linkedUserId:player.id===account.id?account.id:null,displayName:player.name,handicap:String(player.handicap),color:player.color})));
-   await tx.insert(roundGames).values(round.games.map((game,position)=>({id:randomUUID(),roundId:round.id,position,gameKey:game,rulesVersion:1,config:storedConfig as unknown as Record<string,unknown>})));
+   await tx.insert(roundGames).values(round.games.map((game,position)=>({id:randomUUID(),roundId:round.id,position,gameKey:game,rulesVersion:1,config:savedConfig as unknown as Record<string,unknown>})));
    for(let index=0;index<round.results.length;index++){
     const revision=index+1,payload=holePayload(round.results[index]),savedAt=new Date();
     await tx.insert(holeResults).values({roundId:round.id,holeNumber:index+1,revision,payload,savedByUserId:account.id,savedAt});
@@ -59,8 +61,11 @@ export async function authorizeSharedRound(roundId:string,accountId:string,token
  }
  if(!token)return null;
  const invite=await db.select({scope:roundInvites.scope}).from(roundInvites).where(and(eq(roundInvites.roundId,roundId),eq(roundInvites.tokenHash,hashRoundInviteToken(token)),gt(roundInvites.expiresAt,new Date()),isNull(roundInvites.revokedAt))).limit(1);
- if(!invite[0])return null;
- return {round:row[0],scope:invite[0].scope,role:invite[0].scope==='view'?'viewer' as const:'editor' as const,canEdit:invite[0].scope!=='view'};
+ if(invite[0])return {round:row[0],scope:invite[0].scope,role:invite[0].scope==='view'?'viewer' as const:'editor' as const,canEdit:invite[0].scope!=='view'};
+ const eventInvite=await db.select({scope:groupEventInvites.scope,event:groupEvents.snapshot,owner:groupEvents.createdByUserId}).from(groupEventInvites).innerJoin(groupEvents,eq(groupEventInvites.eventId,groupEvents.id)).where(and(eq(groupEventInvites.tokenHash,hashGroupEventInviteToken(token)),gt(groupEventInvites.expiresAt,new Date()),isNull(groupEventInvites.revokedAt),isNull(groupEvents.deletedAt))).limit(1),sharedEvent=eventInvite[0];
+ if(!sharedEvent||!sharedEvent.event.event.pods.some(pod=>pod.linkedRoundId===roundId))return null;
+ if(sharedEvent.owner===accountId)return {round:row[0],scope:'score' as const,role:'captain' as const,canEdit:true};
+ return {round:row[0],scope:sharedEvent.scope==='organize'?'score' as const:'view' as const,role:sharedEvent.scope==='organize'?'editor' as const:'viewer' as const,canEdit:sharedEvent.scope==='organize'};
 }
 
 export async function readSharedRound(roundId:string,accountId:string,token?:string|null):Promise<SharedRoundResponse|null>{
@@ -76,7 +81,7 @@ export async function readSharedRound(roundId:string,accountId:string,token?:str
  const snapshot=access.round.courseSnapshot,stored=(gameRows[0]?.config??{}) as StoredConfig,loop=stored.__loop;
  const {__loop:ignored,...config}=stored;void ignored;
  const source=snapshot.provider==='opengolf'?'opengolf':snapshot.provider==='manual'?'manual':'demo';
- const round:Round={id:access.round.id,course:snapshot.courseName,holes:access.round.holes,players:playerRows.map(row=>({id:row.playerId??row.linkedUserId??`${roundId}-${row.seatIndex}`,name:row.displayName,handicap:Number(row.handicap),color:row.color})),games:gameRows.map(row=>row.gameKey as Round['games'][number]),config:config as Config,results:resultRows.map(row=>holeFromPayload(row.payload)),presses:loop?.presses??[],paid:loop?.paid??[],date:loop?.date??access.round.playedOn.toISOString(),started:loop?.started??access.round.status!=='draft',ended:snapshot.ended,tee:{name:snapshot.teeName,location:snapshot.location,courseRating:snapshot.courseRating,slopeRating:snapshot.slopeRating,pars:snapshot.pars,strokeIndexes:snapshot.strokeIndexes,source,providerCourseId:snapshot.providerCourseId,gender:snapshot.gender,yardage:snapshot.yardage,attribution:snapshot.attribution}};
+ const round:Round={id:access.round.id,course:snapshot.courseName,holes:access.round.holes,players:playerRows.map(row=>({id:row.playerId??row.linkedUserId??`${roundId}-${row.seatIndex}`,name:row.displayName,handicap:Number(row.handicap),color:row.color})),games:gameRows.map(row=>row.gameKey as Round['games'][number]),config:config as Config,results:resultRows.map(row=>holeFromPayload(row.payload)),presses:loop?.presses??[],paid:loop?.paid??[],date:loop?.date??access.round.playedOn.toISOString(),started:loop?.started??access.round.status!=='draft',ended:snapshot.ended,groupId:loop?.groupId,groupEventId:loop?.groupEventId,groupPodId:loop?.groupPodId,tee:{name:snapshot.teeName,location:snapshot.location,courseRating:snapshot.courseRating,slopeRating:snapshot.slopeRating,pars:snapshot.pars,strokeIndexes:snapshot.strokeIndexes,source,providerCourseId:snapshot.providerCourseId,gender:snapshot.gender,yardage:snapshot.yardage,attribution:snapshot.attribution}};
  const activity:RoundActivity[]=activityRows.map(row=>({revision:row.revision,holeNumber:row.holeNumber,editorName:row.editorName??'A player',editorColor:row.preferences?.color??'#d9e4d2',savedAt:row.savedAt.toISOString()}));
  return {round,revision:access.round.revision,status:access.round.status,role:access.role,scope:access.scope==='view'?'view':'score',canEdit:access.canEdit,activity};
 }
@@ -84,18 +89,18 @@ export async function readSharedRound(roundId:string,accountId:string,token?:str
 export async function saveSharedHole(account:Account,token:string|null,roundId:string,holeNumber:number,expectedRevision:number,commandId:string,round:Round){
  const access=await authorizeSharedRound(roundId,account.id,token);
  if(!access||!access.canEdit)return {kind:'forbidden' as const};
- if(access.round.status!=='active')return {kind:'closed' as const};
+ if(!sharedRoundOpenForScoring(access.round.status))return {kind:'closed' as const};
  const db=database();
  const duplicate=await db.select({revision:holeRevisions.revision}).from(holeRevisions).where(eq(holeRevisions.commandId,commandId)).limit(1);
  if(duplicate[0])return {kind:'ok' as const,revision:duplicate[0].revision};
  if(access.round.revision!==expectedRevision)return {kind:'conflict' as const,current:await readSharedRound(roundId,account.id,token)};
- const revision=expectedRevision+1,hole=round.results[holeNumber-1],payload=holePayload(hole),savedAt=new Date(),storedConfig:StoredConfig={...round.config,__loop:{presses:round.presses,paid:round.paid,date:round.date,started:!!round.started}};
+ const revision=expectedRevision+1,hole=round.results[holeNumber-1],payload=holePayload(hole),savedAt=new Date(),savedConfig=storedConfig(round);
  try{
   await db.transaction(async tx=>{
    const updated=await tx.update(rounds).set({revision,status:round.results.length===round.holes?'completed':'active',completedAt:round.results.length===round.holes?savedAt:null,courseSnapshot:courseSnapshot(round)}).where(and(eq(rounds.id,roundId),eq(rounds.revision,expectedRevision)));
    if(((updated[0] as {affectedRows?:number}).affectedRows??0)!==1)throw new Error('ROUND_CONFLICT');
    await tx.delete(roundGames).where(eq(roundGames.roundId,roundId));
-   await tx.insert(roundGames).values(round.games.map((game,position)=>({id:randomUUID(),roundId,position,gameKey:game,rulesVersion:1,config:storedConfig as unknown as Record<string,unknown>})));
+   await tx.insert(roundGames).values(round.games.map((game,position)=>({id:randomUUID(),roundId,position,gameKey:game,rulesVersion:1,config:savedConfig as unknown as Record<string,unknown>})));
    await tx.insert(holeResults).values({roundId,holeNumber,revision,payload,savedByUserId:account.id,savedAt}).onDuplicateKeyUpdate({set:{revision,payload,savedByUserId:account.id,savedAt}});
    await tx.insert(holeRevisions).values({roundId,holeNumber,revision,commandId,payload,savedByUserId:account.id,savedAt});
   });

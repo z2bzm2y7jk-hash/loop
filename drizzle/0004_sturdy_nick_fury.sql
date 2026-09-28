@@ -1,0 +1,1 @@
+ALTER TABLE `group_events` ADD CONSTRAINT `group_events_local_group_id_groups_id_fk` FOREIGN KEY (`local_group_id`) REFERENCES `groups`(`id`) ON DELETE cascade ON UPDATE no action;

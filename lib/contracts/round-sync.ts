@@ -39,6 +39,7 @@ export const sharedRoundSchema=z.object({
  results:z.array(sharedHoleSchema).max(18),presses:z.array(z.object({start:z.number().int().min(0).max(17),end:z.number().int().min(0).max(17),pair:z.number().int().nonnegative()})).max(100),paid:z.array(z.string().max(120)).max(100),date:z.string().datetime({offset:true}),started:z.boolean().optional(),
  tee:z.object({name:z.string().max(80),location:z.string().max(180),courseRating:z.number(),slopeRating:z.number(),pars:z.array(z.number()),strokeIndexes:z.array(z.number()),source:z.enum(['demo','manual','opengolf'])}).passthrough().optional(),
  ended:z.object({kind:z.literal('cancelled'),reason:z.string().max(80),keepBets:z.boolean(),endedAt:z.string().datetime({offset:true}),holesPlayed:z.number().int().min(0).max(18)}).optional(),
+ groupId:z.string().uuid().optional(),groupEventId:z.string().uuid().optional(),groupPodId:z.string().uuid().optional(),
 }).superRefine((round,context)=>{if(round.results.length>round.holes)context.addIssue({code:'custom',path:['results'],message:'A round cannot contain more results than holes.'});round.results.forEach((hole,index)=>{if(hole.scores.length!==round.players.length)context.addIssue({code:'custom',path:['results',index,'scores'],message:'Every player needs a score.'})})});
 
 export const createSharedRoundSchema=z.object({round:sharedRoundSchema,scope:z.enum(['view','score']).default('view')});
@@ -49,6 +50,7 @@ export type SaveHoleCommand=z.infer<typeof saveHoleCommandSchema>;
 export type CompleteRoundCommand=z.infer<typeof completeRoundCommandSchema>;
 export type RoundActivity={revision:number;holeNumber:number;editorName:string;editorColor:string;savedAt:string};
 export type SharedRoundResponse={round:Round;revision:number;status:'draft'|'active'|'completed'|'archived';role:'captain'|'viewer'|'editor';scope:'view'|'score';canEdit:boolean;activity:RoundActivity[]};
+export function sharedRoundOpenForScoring(status:SharedRoundResponse['status']){return status==='draft'||status==='active'}
 
 export type CourseSnapshot={
  courseName:string;

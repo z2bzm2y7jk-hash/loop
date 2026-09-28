@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest';
-import {createSharedRoundSchema,roundChangesQuerySchema,saveHoleCommandSchema,sharedHoleCommandSchema} from '../lib/contracts/round-sync';
+import {createSharedRoundSchema,roundChangesQuerySchema,saveHoleCommandSchema,sharedHoleCommandSchema,sharedRoundOpenForScoring} from '../lib/contracts/round-sync';
 import {newRound} from '../lib/demo';
 
 const validCommand={
@@ -27,8 +27,16 @@ describe('round synchronization contract',()=>{
  });
 
  it('validates a shared round and its conflict-safe score update',()=>{
-  const round={...newRound(),started:true,results:[{scores:[4,5,4,6],greenie:null,sandies:[],dots:[],snake:null}]};
+  const round={...newRound(),started:true,results:[{scores:[4,5,4,6],greenie:null,sandies:[],dots:[],snake:null}],groupId:'11111111-1111-4111-8111-111111111111',groupEventId:'22222222-2222-4222-8222-222222222222',groupPodId:'33333333-3333-4333-8333-333333333333'};
   expect(createSharedRoundSchema.parse({round,scope:'view'}).scope).toBe('view');
+  expect(createSharedRoundSchema.parse({round,scope:'view'}).round.groupEventId).toBe(round.groupEventId);
   expect(sharedHoleCommandSchema.parse({...validCommand,holeNumber:1,round}).round.results).toHaveLength(1);
+ });
+
+ it('allows the first score to activate a newly created draft round',()=>{
+  expect(sharedRoundOpenForScoring('draft')).toBe(true);
+  expect(sharedRoundOpenForScoring('active')).toBe(true);
+  expect(sharedRoundOpenForScoring('completed')).toBe(false);
+  expect(sharedRoundOpenForScoring('archived')).toBe(false);
  });
 });
