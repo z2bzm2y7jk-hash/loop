@@ -30,6 +30,7 @@ export function estimateExposure(round:Round,game:Game):Exposure{
     }
     case 'Match Play':possibleMax=(count-1)*(q.matchMode==='hole'?holes:1)*stake;suggestions.push('Use one whole-round match or reduce the value per pair.');break;
     case 'Sixes':possibleMax=holes*stake/2;suggestions.push('Reduce the team value per hole.');break;
+    case 'Nine Point':case 'Split Sixes':possibleMax=holes*8*stake;suggestions.push('Reduce the value per point.');break;
     case 'Vegas':possibleMax=holes*(q.vegasCap?88:2009)*stake/2;assumptions.push(q.vegasCap?'Each score is capped at 9 for Vegas.':'Scores up to 20 can create large team numbers.');suggestions.push('Cap scores at 9 or reduce the value per point.');break;
     case 'Hammer':possibleMax=holes*stake*2**q.hammerLimit*(q.hammerBirdie?2:1);suggestions.push('Limit accepted Hammers or reduce the base value.');break;
     case 'Greenies':possibleMax=pars.slice(0,holes).filter(par=>par===3).length*stake;suggestions.push('Reduce the closest-to-pin value.');break;
@@ -38,7 +39,7 @@ export function estimateExposure(round:Round,game:Game):Exposure{
     case 'Snake':possibleMax=(q.snakeMode==='each'?holes:1)*stake;suggestions.push('Use last holder only or reduce the value.');break;
   }
   possibleMax=cents(possibleMax);
-  const meta=gameMetadata[game],base=game==='Nassau'?5:game==='Vegas'?1:game==='Greenies'?5:2;
+  const meta=gameMetadata[game],base=game==='Nassau'?5:game==='Vegas'||game==='Nine Point'||game==='Split Sixes'?1:game==='Greenies'?5:2;
   const projectedLow=Math.min(possibleMax,cents(meta.typicalExposureLow*stake/base*holes/18));
   const projectedHigh=Math.min(possibleMax,cents(meta.typicalExposureHigh*stake/base*holes/18));
   return {projectedLow,projectedHigh:Math.max(projectedLow,projectedHigh),possibleMax,assumptions,suggestions};

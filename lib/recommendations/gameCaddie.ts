@@ -20,7 +20,7 @@ export function recommendGames(input:CaddieInput,excluded:Game[]=[]):Recommendat
   return gameCatalog.filter(item=>gameFits(item.name,input.players.length,input.holes)&&!excluded.includes(item.name)).flatMap(item=>{
     const base:Round={id:'recommendation',date:'',course:'Your course',holes:input.holes,players:input.players,games:[item.name],config:{...defaults,rules:defaultRules()},results:[],presses:[],paid:[]};
     const configuration=configurationForExposure(base,item.name,input.maxExposure,input.vibe);
-    if(spread>=10&&item.supportsHandicaps){const q=configuration.config.rules!;if(item.name==='Skins')configuration.config.net=true;if(item.name==='Nassau')q.nassauNet=true;if(item.name==='Wolf')q.wolfNet=true;if(item.name==='Vegas')q.vegasNet=true;if(item.name==='Match Play')q.matchNet=true;if(item.name==='Hammer')q.hammerNet=true;}
+    if(spread>=10&&item.supportsHandicaps){const q=configuration.config.rules!;if(item.name==='Skins')configuration.config.net=true;if(item.name==='Nassau')q.nassauNet=true;if(item.name==='Wolf')q.wolfNet=true;if(item.name==='Vegas')q.vegasNet=true;if(item.name==='Match Play')q.matchNet=true;if(item.name==='Hammer')q.hammerNet=true;if(item.name==='Nine Point')q.ninePointNet=true;if(item.name==='Split Sixes')q.splitSixesNet=true;}
     const exposure=estimateExposure(configuration,item.name);
     if(exposure.possibleMax>input.maxExposure+.01)return [];
     const played=groupHistory.filter(round=>round.games.includes(item.name)).length;
@@ -40,6 +40,7 @@ export function recommendGames(input:CaddieInput,excluded:Game[]=[]):Recommendat
     score-=recent*3;
     const configuredStake=gameStake(configuration.config,item.name);if(configuredStake<.25)score-=22;else if(configuredStake<.5)score-=8;
     if(input.vibe==='competitive'&&input.players.length===4&&input.holes===18&&item.name==='Sixes')score+=4;
+    if(input.players.length===3&&(item.name==='Nine Point'||item.name==='Split Sixes'))score+=10;
     if(exposure.projectedHigh<=input.maxExposure*.6)score+=2;
     const reasons=[`${countWord(input.players.length)} players and ${input.holes} holes fit ${item.name}.`];
     if(spread>=10&&item.supportsHandicaps)reasons.push('Net scoring can balance this group’s handicaps.');

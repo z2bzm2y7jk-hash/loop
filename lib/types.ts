@@ -1,6 +1,6 @@
 import type {Rules} from './rules';
 export type Player={id:string;name:string;handicap:number;color:string};
-export type Game='Nassau'|'Skins'|'Wolf'|'Match Play'|'Sixes'|'Vegas'|'Hammer'|'Greenies'|'Birdies'|'Sandies'|'Snake'|'Dots';
+export type Game='Nassau'|'Skins'|'Wolf'|'Match Play'|'Sixes'|'Nine Point'|'Split Sixes'|'Vegas'|'Hammer'|'Greenies'|'Birdies'|'Sandies'|'Snake'|'Dots';
 export type Config={rules?:Rules;front:number;back:number;overall:number;auto:boolean;teams:boolean;skin:number;carry:boolean;net:boolean;greenie:number;greenHoles:number[];birdie:number};
 export type WolfChoice={wolf:number;mode:'partner'|'lone'|'blind';partner?:number;stake?:number};
 export type HammerEvent={by:'A'|'B';response:'pending'|'accepted'|'declined'};

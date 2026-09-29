@@ -9,6 +9,8 @@ describe('random game suggestions',()=>{
     expect(two).not.toContain('Nassau');
     expect(eligibleGames({players:4,holes:18,style:'any'})).toContain('Vegas');
     expect(eligibleGames({players:3,holes:18,style:'any'})).toContain('Wolf');
+    expect(eligibleGames({players:3,holes:9,style:'any'})).toEqual(expect.arrayContaining(['Nine Point','Split Sixes']));
+    expect(eligibleGames({players:4,holes:18,style:'any'})).not.toContain('Nine Point');
     expect(eligibleGames({players:5,holes:18,style:'any'})).not.toContain('Vegas');
   });
   it('filters by desired style and avoids an immediate repeat',()=>{

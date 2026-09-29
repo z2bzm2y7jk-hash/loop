@@ -61,7 +61,7 @@ export function TripsPage({data,onChange,history,onRound,onCaddie,onToast}:{data
 export function PricingPage({onBack}:{onBack:()=>void}){
  const [message,setMessage]=useState('');
  const plans=[
-  {name:'Player',price:'Free during beta',label:'CURRENT ACCESS',features:['All 12 side games, including Wolf','Custom bet amounts and rules','Scorecard export and settlement','Saved profile, rounds and groups']},
+  {name:'Player',price:'Free during beta',label:'CURRENT ACCESS',features:['All 14 side games, including Wolf and Nine Point','Custom bet amounts and rules','Scorecard export and settlement','Saved profile, rounds and groups']},
   {name:'Game Captain',price:'$19.99 / year',label:'PLANNED',checkout:process.env.NEXT_PUBLIC_LOOP_CAPTAIN_CHECKOUT_URL,features:['Everything in Player','Unlimited saved home games','Advanced exposure controls','Full group history and stats']},
   {name:'Trip Captain',price:'$9.99 / trip',label:'PLANNED',checkout:process.env.NEXT_PUBLIC_LOOP_TRIP_CHECKOUT_URL,features:['Up to 24 players','Multi-round trip management','Team and individual standings','Final trip settlement and recap']}
  ];

@@ -180,6 +180,9 @@
  .tee-numbers b{font-size:14px}
 }
 
+/* Three-player point standings stay readable on narrow scorecards. */
+.points-summary{gap:16px;justify-content:space-between}.points-summary>div{flex:1;min-width:0}.points-summary span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.points-summary strong{font-size:32px}
+
 /* Recurring local-group events */
 .avatar-count{background:#dfe6d7;color:var(--green);font-weight:800}
 .new-group-planner{border-bottom:1px solid var(--line);margin:2px 0 20px}.new-group-planner>summary{justify-content:space-between;min-height:52px;padding-inline:2px;font-size:12px;font-weight:800}.new-group-planner[open]>summary svg{transform:rotate(45deg)}.new-group-planner .feature-form{padding-bottom:8px}

@@ -34,7 +34,7 @@ const sharedHoleSchema=z.object({scores:z.array(z.number().int().min(1).max(25))
 
 export const sharedRoundSchema=z.object({
  id:z.string().uuid(),course:z.string().trim().min(1).max(180),holes:z.union([z.literal(9),z.literal(18)]),players:z.array(sharedPlayerSchema).min(2).max(8),
- games:z.array(z.enum(['Nassau','Skins','Wolf','Match Play','Sixes','Vegas','Hammer','Greenies','Birdies','Sandies','Snake','Dots'])).min(1).max(12),
+ games:z.array(z.enum(['Nassau','Skins','Wolf','Match Play','Sixes','Nine Point','Split Sixes','Vegas','Hammer','Greenies','Birdies','Sandies','Snake','Dots'])).min(1).max(14),
  config:z.object({front:z.number().nonnegative(),back:z.number().nonnegative(),overall:z.number().nonnegative(),auto:z.boolean(),teams:z.boolean(),skin:z.number().nonnegative(),carry:z.boolean(),net:z.boolean(),greenie:z.number().nonnegative(),greenHoles:z.array(z.number().int().min(1).max(18)),birdie:z.number().nonnegative()}).passthrough(),
  results:z.array(sharedHoleSchema).max(18),presses:z.array(z.object({start:z.number().int().min(0).max(17),end:z.number().int().min(0).max(17),pair:z.number().int().nonnegative()})).max(100),paid:z.array(z.string().max(120)).max(100),date:z.string().datetime({offset:true}),started:z.boolean().optional(),
  tee:z.object({name:z.string().max(80),location:z.string().max(180),courseRating:z.number(),slopeRating:z.number(),pars:z.array(z.number()),strokeIndexes:z.array(z.number()),source:z.enum(['demo','manual','opengolf'])}).passthrough().optional(),

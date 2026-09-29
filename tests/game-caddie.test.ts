@@ -37,6 +37,10 @@ describe('Game Caddie',()=>{
     expect(results.slice(0,3).every(result=>result.exposure.possibleMax<=5)).toBe(true);
     expect(results[0].exposure.assumptions).toContain('An estimate, not an enforced loss cap.');
   });
+  it('prioritizes purpose-built point games for a threesome when exposure allows them',()=>{
+    const results=recommendGames(input({players:players.slice(0,3),maxExposure:200,complexity:'any'}));
+    expect(results.slice(0,2).map(result=>result.game)).toEqual(expect.arrayContaining(['Nine Point','Split Sixes']));
+  });
 });
 
 describe('Sixes and exposure',()=>{

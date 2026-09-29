@@ -54,6 +54,15 @@ export function HelpCenter({onBack,onStartRound,onGroups,onGames,onHouseRules}:H
     <li><span>1</span><p>Tap <strong>Start a round</strong>.</p></li><li><span>2</span><p>Choose the course and tees. Check the rating, slope, and hole information before continuing.</p></li><li><span>3</span><p>Check every player’s name and handicap. Add or remove players as needed.</p></li><li><span>4</span><p>Choose the games. Enter the whole-dollar bet amounts your group agreed to.</p></li><li><span>5</span><p>Read the review screen to the group, then tap <strong>Start round</strong>.</p></li>
    </StepList><p className="help-tip"><strong>Good habit:</strong> Agree on every game, rule, and dollar amount before the first tee shot.</p></HelpTopic>
 
+   <HelpTopic id="help-three-players" icon={<Users/>} title="Choose a game for three golfers" summary="Nine Point and Split Sixes are made for a threesome"><p className="help-plain-definition">A foursome is not required. Loop has two points games designed for exactly three golfers, and it calculates every tie automatically.</p><StepList>
+    <li><span>1</span><p>During round setup, choose <strong>3 golfers</strong>. Loop will show games that fit a threesome.</p></li>
+    <li><span>2</span><p>Choose <strong>Nine Point</strong> for the friendlier option. Each hole awards 5 points for low score, 3 for middle, and 1 for high.</p></li>
+    <li><span>3</span><p>Choose <strong>Split Sixes</strong> for more pressure. Each hole awards 4 points for low score, 2 for middle, and 0 for high.</p></li>
+    <li><span>4</span><p>Leave <strong>Use net scores</strong> on when handicaps differ. Turn it off only when your group wants gross scores.</p></li>
+    <li><span>5</span><p>Enter the whole-dollar value for one point. Read the review screen together before starting.</p></li>
+    <li><span>6</span><p>During play, enter the three golf scores normally. Open <strong>Games</strong> to see the points from every hole and <strong>Money</strong> to see the current settlement.</p></li>
+   </StepList><p className="help-tip"><strong>Ties are automatic.</strong> For example, two players tied for low in Nine Point receive 4 points each and the third player receives 1.</p></HelpTopic>
+
    <HelpTopic id="help-score" icon={<PencilLine/>} title="Enter scores during play" summary="Save each hole and handle in-game choices"><StepList>
     <li><span>1</span><p>Open the <strong>Scorecard</strong> tab. The current hole appears at the top.</p></li><li><span>2</span><p>Use the plus and minus buttons, or tap the score box and type a number.</p></li><li><span>3</span><p>If Wolf, Hammer, or Vegas asks for a choice, make that choice before saving the hole.</p></li><li><span>4</span><p>Read the scores back to the group, then tap <strong>Save hole</strong>.</p></li><li><span>5</span><p>Open <strong>Money</strong> at any time to see the current standings.</p></li>
    </StepList></HelpTopic>

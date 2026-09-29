@@ -5,8 +5,8 @@ import type {Game} from './types';
 export type GameStyle = 'any' | 'easy' | 'strategy';
 export type GamePick = {players:number;holes:9|18;style:GameStyle};
 
-const easy = new Set<Game>(['Skins','Match Play','Greenies','Birdies','Sandies','Snake','Dots']);
-const strategy = new Set<Game>(['Nassau','Wolf','Match Play','Sixes','Vegas','Hammer']);
+const easy = new Set<Game>(['Skins','Match Play','Nine Point','Split Sixes','Greenies','Birdies','Sandies','Snake','Dots']);
+const strategy = new Set<Game>(['Nassau','Wolf','Match Play','Sixes','Nine Point','Split Sixes','Vegas','Hammer']);
 
 export function eligibleGames({players,holes,style}:GamePick):Game[]{
   if (!Number.isInteger(players) || players<2 || players>8) return [];

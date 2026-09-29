@@ -38,7 +38,7 @@ Enter whole-stroke scores with the large +/- controls, then save each hole. Wolf
 - **Trips:** Myrtle Beach 2027 demo has 12 golfers, three days, nine calculated foursome rounds, standings and net settlement. Create a local trip, define round plans, and attach a completed round.
 - **Profile:** player records, best partner, toughest opponent, favorite game and head-to-head rivalries.
 - **Help & how-to:** plain-language, step-by-step guidance for setup, scoring, shared groups, bets, corrections, exports, adding Loop to a phone’s Home Screen, saving a reusable home game, and running a regular group as captain.
-- **Membership:** all 12 games are unlocked during private beta. Optional secure checkout links can be configured later for Game Captain and Trip Captain plans.
+- **Membership:** all 14 games are unlocked during private beta. Optional secure checkout links can be configured later for Game Captain and Trip Captain plans.
 
 Account preferences, the active round, completed history, House Rules, groups and trips persist in the user’s online account. A small browser cache supports recovery if a save is interrupted. Paid flags record settlement status only; Loop never moves wager money.
 
@@ -50,10 +50,10 @@ Live sharing creates an expiring round link. Captain scoring is the recommended 
 
 - `app/page.tsx`: client screen routing and round state; `app/globals.css`: mobile/desktop styling.
 - `lib/types.ts`, `lib/rules.ts`, `lib/product-model.ts`: typed round, player, rules and saved product data.
-- `lib/library.ts`, `lib/game-catalog.ts`: 12 supported games and discovery metadata.
+- `lib/library.ts`, `lib/game-catalog.ts`: 14 supported games and discovery metadata.
 - `lib/recommendations/gameCaddie.ts`: deterministic candidate scoring and explanation.
 - `lib/games/exposure.ts`: projected range, modeled maximum, and suggested settings.
-- `lib/games/*`: pure payout engines, including rotating partnerships in Sixes and hole decisions in Wolf/Hammer/Vegas.
+- `lib/games/*`: pure payout engines, including three-player ranked points, rotating partnerships in Sixes, and hole decisions in Wolf/Hammer/Vegas.
 - `lib/games/index.ts`, `lib/settlement.ts`: zero-sum ledger and cent-safe payment matching.
 - `lib/insights/*`, `lib/trip-insights.ts`, `lib/recap.ts`, `lib/share-card.ts`: derived group, player, trip and round outputs.
 - `lib/simulation.ts`, `lib/demo-tools.ts`: handicap-weighted demo scores and deliberate test events.

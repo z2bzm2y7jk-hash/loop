@@ -23,4 +23,9 @@ describe('shared weekly event contract',()=>{
   const invalid={...snapshot,event:{...event,attendeeIds:['p1','p2','p3','guest'],pods:[{...event.pods[0],playerIds:['p1','p2','p3','guest']}]}};
   expect(sharedWeeklySnapshotSchema.safeParse(invalid).success).toBe(false);
  });
+
+ it('accepts a saved threesome points game for a weekly group',()=>{
+  const houseRule={id:'three-player-rule',name:'Threesome Points',games:['Nine Point','Split Sixes'],holes:18,playerCount:3,config:newRound().config,createdAt:'2026-09-28T12:00:00.000Z'};
+  expect(sharedWeeklySnapshotSchema.parse({...snapshot,houseRule}).houseRule?.games).toEqual(['Nine Point','Split Sixes']);
+ });
 });

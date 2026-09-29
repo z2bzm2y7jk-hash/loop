@@ -33,6 +33,11 @@ describe('round synchronization contract',()=>{
   expect(sharedHoleCommandSchema.parse({...validCommand,holeNumber:1,round}).round.results).toHaveLength(1);
  });
 
+ it('accepts the new three-player games in shared rounds',()=>{
+  const round={...newRound(),players:newRound().players.slice(0,3),games:['Nine Point','Split Sixes'] as const};
+  expect(createSharedRoundSchema.parse({round,scope:'view'}).round.games).toEqual(['Nine Point','Split Sixes']);
+ });
+
  it('allows the first score to activate a newly created draft round',()=>{
   expect(sharedRoundOpenForScoring('draft')).toBe(true);
   expect(sharedRoundOpenForScoring('active')).toBe(true);
