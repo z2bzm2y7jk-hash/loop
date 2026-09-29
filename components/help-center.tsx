@@ -75,6 +75,21 @@ export function HelpCenter({onBack,onStartRound,onGroups,onGames,onHouseRules}:H
     <li><Check size={17}/><p>A “$5” setting is the value used by that game’s rules. Loop uses whole dollars to keep setup simple.</p></li><li><Check size={17}/><p>The <strong>Money</strong> tab shows who is up or down while the round is being played.</p></li><li><Check size={17}/><p><strong>Settle up</strong> shows the simplest payments between players after the round.</p></li><li><Check size={17}/><p>Loop records whether someone marked a payment as paid. Loop does not send or hold money.</p></li><li><Check size={17}/><p><strong>Maximum exposure</strong> is an estimate that helps choose a comfortable game. It is not a guaranteed limit.</p></li>
    </ul></HelpTopic>
 
+   <HelpTopic id="help-responsible-play" icon={<ShieldCheck/>} title="Keep side games friendly and safe" summary="Set limits, stop when needed, and know where to get help"><p className="help-plain-definition"><strong>Loop is a scorekeeper, not a sportsbook.</strong> It records informal balances but never accepts a bet, holds money, or sends a payment.</p><StepList>
+    <li><span>1</span><p>Before the first tee, agree on the game, rules, and whole-dollar amount.</p></li>
+    <li><span>2</span><p>Choose an amount every player can comfortably lose. Never use money needed for housing, food, healthcare, or family needs.</p></li>
+    <li><span>3</span><p>Set a limit before play. Do not increase it to chase a loss.</p></li>
+    <li><span>4</span><p>Anyone may ask to pause, lower the amount, or stop the side game. The group can end a Loop round and choose whether partial results count.</p></li>
+    <li><span>5</span><p>If gambling causes stress, secrecy, debt, or conflict, call or text <a className="help-inline-link" href="tel:+18006973738">1-800-MY-RESET</a> for free, confidential help.</p></li>
+   </StepList><div className="help-resource-links"><a href="/responsible-play">Read Loop’s responsible-play guide <ArrowRight size={16}/></a><a href="https://www.ncpgambling.org/chat/" target="_blank" rel="noreferrer">Open the confidential NCPG chat <ArrowRight size={16}/></a></div></HelpTopic>
+
+   <HelpTopic id="help-privacy" icon={<ShieldCheck/>} title="Understand your privacy" summary="What Loop saves, shares, and keeps on your device"><ul className="help-bullets">
+    <li><Check size={17}/><p>Loop saves your account, golfer preferences, rounds, groups, and game history so they are available across your devices.</p></li>
+    <li><Check size={17}/><p>People with a valid group link can see the golf information that the captain shares. Editing access is set separately.</p></li>
+    <li><Check size={17}/><p>Your location is requested only after you tap <strong>Use my location</strong>. It finds nearby courses and is not saved to your Loop account.</p></li>
+    <li><Check size={17}/><p>Loop currently has no advertising, does not sell personal information, and does not process payments.</p></li>
+   </ul><div className="help-resource-links"><a href="/privacy">Read the full privacy policy <ArrowRight size={16}/></a></div></HelpTopic>
+
    <HelpTopic id="help-fix" icon={<CloudRain/>} title="Fix a mistake or end early" summary="Correct a score, change a game, or handle rain"><ul className="help-bullets">
     <li><Check size={17}/><p>Use <strong>Edit last hole</strong> to correct the most recently saved score.</p></li><li><Check size={17}/><p>Use <strong>Edit games &amp; bets</strong> during an active round to change a game or dollar amount. Loop recalculates the results.</p></li><li><Check size={17}/><p>Use <strong>End round</strong> if rain or another problem stops play.</p></li><li><Check size={17}/><p>Choose <strong>Keep partial results</strong> if the group agrees the scores and bets should count. Choose discard if they should be removed from history and stats.</p></li>
    </ul></HelpTopic>

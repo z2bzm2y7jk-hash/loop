@@ -1,0 +1,92 @@
+# Loop UI/UX audit
+
+Updated: September 29, 2026  
+Methods: Impeccable technical review, UI/UX Pro Max design-system guidance, responsive inspection at 320 px, 390 px and 1440 px, source review, contrast measurement, accessibility-tree review and production-build evidence.
+
+## Audit health score
+
+| Dimension | Score | Current state |
+|---|---:|---|
+| Accessibility | 4/4 | Essential phone text now has a 16 px floor, contrast failures are corrected, account-mode controls expose state and skip navigation reaches the main content. |
+| Performance | 3/4 | The reviewed pages produce no browser errors and the production first load is 174 kB. The main app is still concentrated in one large client module. |
+| Responsive design | 4/4 | Public flows have no horizontal overflow at 320 px or 390 px, inputs avoid iOS zoom, legal pages are phone-first and controls honor safe areas. |
+| Theming | 2/4 | Loop has primitive, semantic and component tokens, but the stylesheet still contains repeated direct color values. The intentional light theme suits outdoor use. |
+| Implementation integrity | 4/4 | The interface remains product-specific, consistent and aligned with the clubhouse scorebook direction. |
+| **Total** | **17/20** | **Strong beta foundation. Resilience and account recovery are the next priorities.** |
+
+## Design direction
+
+Loop has a recognizable visual system, real golf-specific workflows, consistent Lucide icons, large score controls, clear saved/live states and product language tailored to golfers. UI/UX Pro Max suggested a vibrant gaming treatment during a broad pattern search; that does not fit Loop's users or on-course setting. The established clubhouse scorebook direction remains the product standard.
+
+## Completed in this release
+
+- Raised the global reading size to 15 px and the phone body size to 16 px while preserving compact nonessential golf metadata.
+- Corrected low-contrast signup fine print and scorecard table headings.
+- Added a keyboard-visible skip link and a focusable main-content target.
+- Replaced the incomplete auth tab pattern with a simple two-button mode switch using `aria-pressed`.
+- Added a public privacy policy describing the data Loop actually uses, group sharing, course-location search, storage, retention and current beta rights.
+- Added a public responsible-play guide and surfaced the current national helpline on signup and in Help.
+- Added permanent privacy and responsible-play links to signup, the home footer, Profile settings and Help.
+- Verified the new public pages and signup notice at a 390 × 844 phone viewport with no browser errors.
+
+## Remaining priorities
+
+### P1 — Make live scoring resilient to weak or lost connections
+
+**Location:** `app/page.tsx`
+
+Loop writes a local copy and shows an offline state when a save fails, but initial loading does not restore the cache, there is no queued-save workflow, and shared-round updates depend on polling.
+
+**Next change:** Restore the latest local snapshot when the network request fails, queue unsynced hole changes, show the last successful sync time, detect conflicts and add an installable offline app shell.
+
+### P1 — Add account recovery and self-service deletion
+
+**Location:** `components/account-access.tsx` and authentication routes
+
+Registration, login, password changes and logout work. Forgot-password, verified email and self-service account deletion are still missing. The privacy policy explains the current private-beta request process instead of implying these controls already exist.
+
+**Next change:** Add time-limited password-reset links, basic email verification, a support contact and a safe account-deletion workflow before a public mobile release.
+
+### P2 — Give primary screens real URLs and phone-back behavior
+
+**Location:** `app/page.tsx`
+
+Primary screens live in React state. Refreshing or using the browser back gesture does not preserve ordinary screens such as Groups, Games, Profile or Help.
+
+**Next change:** Move primary screens to routes or synchronize them with history state while preserving invitation URLs and active-round recovery.
+
+### P2 — Split the main client bundle by feature
+
+**Location:** `app/page.tsx`
+
+The production build reports a 174 kB first load. The single client module contains home, setup, live scoring, history, profile, groups and modal orchestration.
+
+**Next change:** Lazy-load Groups, Trips, Help, Pricing and recap tools while keeping scoring immediately available.
+
+### P3 — Continue consolidating visual tokens
+
+**Location:** `app/globals.css`
+
+The token foundation is sound, but direct colors and repeated surface values remain. Consolidate these as related components are touched; a wholesale rewrite is not needed before friend testing.
+
+## Recommended build order
+
+1. Offline restore, queued saves and sync-conflict handling.
+2. Password reset, email verification, support contact and account deletion.
+3. Real routes and reliable browser-back behavior.
+4. Privacy-conscious beta feedback and error reporting.
+5. Stableford and Quota after the testing foundation is dependable.
+6. Lazy-load secondary features and continue token cleanup.
+
+## Verification
+
+- ESLint passes.
+- TypeScript passes.
+- All 90 automated tests pass.
+- The production build passes and statically generates `/privacy` and `/responsible-play`.
+- The new phone layouts have no visible clipping or horizontal overflow.
+- The reviewed browser console contains no warnings or errors.
+
+## Audit limits
+
+The live visual inspection covered public registration, privacy and responsible-play pages. Signed-in flows were reviewed from implementation and production-build evidence because no disposable test account was available in the audit browser. Add a seeded staging account to the beta process so signed-in screens can be visually regression-tested without touching a real golfer's records.

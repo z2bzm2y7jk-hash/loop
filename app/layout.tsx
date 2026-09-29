@@ -16,4 +16,4 @@ export const viewport: Viewport = {
  themeColor:'#203f33',
  colorScheme:'light',
 };
-export default function Layout({children}:{children:React.ReactNode}) { return <html lang="en"><body>{children}</body></html> }
+export default function Layout({children}:{children:React.ReactNode}) { return <html lang="en"><body><a className="skip-link" href="#main-content">Skip to main content</a>{children}</body></html> }
