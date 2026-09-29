@@ -27,17 +27,18 @@ Loop has a recognizable visual system, real golf-specific workflows, consistent 
 - Added a public privacy policy describing the data Loop actually uses, group sharing, course-location search, storage, retention and current beta rights.
 - Added a public responsible-play guide and surfaced the current national helpline on signup and in Help.
 - Added permanent privacy and responsible-play links to signup, the home footer, Profile settings and Help.
+- Added phone-first recovery for weak service: Loop restores an unsynced local scorecard, keeps it ahead of an older server copy, retries when the connection returns and clears the device copy at sign-out.
 - Verified the new public pages and signup notice at a 390 × 844 phone viewport with no browser errors.
 
 ## Remaining priorities
 
-### P1 — Make live scoring resilient to weak or lost connections
+### P1 — Finish the installable offline shell and conflict handling
 
 **Location:** `app/page.tsx`
 
-Loop writes a local copy and shows an offline state when a save fails, but initial loading does not restore the cache, there is no queued-save workflow, and shared-round updates depend on polling.
+Loop now restores the last local snapshot, preserves unsynced edits, retries automatically when connectivity returns and explains when changes are only on the phone. The browser still needs a service worker to launch from a cold offline start, and shared-round conflicts need a dedicated review screen.
 
-**Next change:** Restore the latest local snapshot when the network request fails, queue unsynced hole changes, show the last successful sync time, detect conflicts and add an installable offline app shell.
+**Next change:** Add an app-shell service worker, show the last successful sync time and give captains a clear comparison screen when the server and phone both changed.
 
 ### P1 — Add account recovery and self-service deletion
 
@@ -71,8 +72,8 @@ The token foundation is sound, but direct colors and repeated surface values rem
 
 ## Recommended build order
 
-1. Offline restore, queued saves and sync-conflict handling.
-2. Password reset, email verification, support contact and account deletion.
+1. Password reset, email verification, support contact and account deletion.
+2. Installable offline shell, last-sync time and sync-conflict handling.
 3. Real routes and reliable browser-back behavior.
 4. Privacy-conscious beta feedback and error reporting.
 5. Stableford and Quota after the testing foundation is dependable.
@@ -82,7 +83,7 @@ The token foundation is sound, but direct colors and repeated surface values rem
 
 - ESLint passes.
 - TypeScript passes.
-- All 90 automated tests pass.
+- All 94 automated tests pass, including local recovery, legacy-cache compatibility and sign-out cleanup.
 - The production build passes and statically generates `/privacy` and `/responsible-play`.
 - The new phone layouts have no visible clipping or horizontal overflow.
 - The reviewed browser console contains no warnings or errors.
