@@ -11,6 +11,7 @@ export type Account={
  email:string;
  displayName:string;
  handicap:number;
+ emailVerified:boolean;
  preferences:AccountPreferences;
 };
 

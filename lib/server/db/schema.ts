@@ -1,4 +1,4 @@
-import {bigint,boolean,datetime,decimal,index,int,json,mysqlEnum,mysqlTable,primaryKey,timestamp,tinyint,uniqueIndex,varchar} from 'drizzle-orm/mysql-core';
+import {bigint,boolean,datetime,decimal,index,int,json,mysqlEnum,mysqlTable,primaryKey,text,timestamp,tinyint,uniqueIndex,varchar} from 'drizzle-orm/mysql-core';
 import type {CourseSnapshot,HolePayload,RoundOutcomeSnapshot} from '@/lib/contracts/round-sync';
 import type {AccountPreferences} from '@/lib/account';
 import type {Round} from '@/lib/types';
@@ -43,6 +43,34 @@ export const sessions=mysqlTable('sessions',{
  lastSeenAt:datetime('last_seen_at',{mode:'date'}).notNull(),
  createdAt:createdAt(),
 },table=>[uniqueIndex('sessions_token_hash_unique').on(table.tokenHash),index('sessions_user_expires_idx').on(table.userId,table.expiresAt)]);
+
+export const passwordResetTokens=mysqlTable('password_reset_tokens',{
+ id:id('id').primaryKey(),
+ userId:id('user_id').notNull().references(()=>users.id,{onDelete:'cascade'}),
+ tokenHash:varchar('token_hash',{length:64}).notNull(),
+ expiresAt:datetime('expires_at',{mode:'date'}).notNull(),
+ usedAt:datetime('used_at',{mode:'date'}),
+ createdAt:createdAt(),
+},table=>[uniqueIndex('password_reset_tokens_hash_unique').on(table.tokenHash),index('password_reset_tokens_user_idx').on(table.userId),index('password_reset_tokens_expires_idx').on(table.expiresAt)]);
+
+export const emailVerificationTokens=mysqlTable('email_verification_tokens',{
+ id:id('id').primaryKey(),
+ userId:id('user_id').notNull().references(()=>users.id,{onDelete:'cascade'}),
+ tokenHash:varchar('token_hash',{length:64}).notNull(),
+ expiresAt:datetime('expires_at',{mode:'date'}).notNull(),
+ usedAt:datetime('used_at',{mode:'date'}),
+ createdAt:createdAt(),
+},table=>[uniqueIndex('email_verification_tokens_hash_unique').on(table.tokenHash),index('email_verification_tokens_user_idx').on(table.userId),index('email_verification_tokens_expires_idx').on(table.expiresAt)]);
+
+export const supportRequests=mysqlTable('support_requests',{
+ id:id('id').primaryKey(),
+ userId:id('user_id').references(()=>users.id,{onDelete:'set null'}),
+ email:varchar('email',{length:254}).notNull(),
+ category:mysqlEnum('category',['account','privacy','bug','other']).default('other').notNull(),
+ message:text('message').notNull(),
+ status:mysqlEnum('status',['open','closed']).default('open').notNull(),
+ createdAt:createdAt(),updatedAt:updatedAt(),
+},table=>[index('support_requests_user_idx').on(table.userId),index('support_requests_status_created_idx').on(table.status,table.createdAt)]);
 
 export const groups=mysqlTable('groups',{
  id:id('id').primaryKey(),

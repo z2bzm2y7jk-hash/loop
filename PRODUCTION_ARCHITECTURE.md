@@ -123,7 +123,7 @@ The local browser cache is a resilience layer, not the permanent source of truth
 - Input validation at every HTTP boundary
 - Security headers, request-size limits and rate limiting
 - Daily database backups and tested restore instructions
-- Account export and deletion workflows before public launch
+- Account export before public launch; self-service deletion is implemented
 - Dependency, audit-log and error monitoring without financial details in telemetry
 
 ## Delivery phases

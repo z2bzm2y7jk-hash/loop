@@ -39,17 +39,24 @@ export async function verifyPassword(password:string,encoded:string|null){
  return actual.length===expected.length&&timingSafeEqual(actual,expected);
 }
 
+function hashPurposeToken(token:string,purpose:string){
+ return createHash('sha256').update(`${token}.${purpose}.${serverEnvironment().AUTH_SECRET??''}`).digest('hex');
+}
+
 export function hashSessionToken(token:string){
  return createHash('sha256').update(`${token}.${serverEnvironment().AUTH_SECRET??''}`).digest('hex');
 }
 
 export function hashRoundInviteToken(token:string){
- return createHash('sha256').update(`${token}.round-invite.${serverEnvironment().AUTH_SECRET??''}`).digest('hex');
+ return hashPurposeToken(token,'round-invite');
 }
 
 export function hashGroupEventInviteToken(token:string){
- return createHash('sha256').update(`${token}.group-event-invite.${serverEnvironment().AUTH_SECRET??''}`).digest('hex');
+ return hashPurposeToken(token,'group-event-invite');
 }
+
+export function hashPasswordResetToken(token:string){return hashPurposeToken(token,'password-reset')}
+export function hashEmailVerificationToken(token:string){return hashPurposeToken(token,'email-verification')}
 
 export async function createSession(userId:string){
  const token=randomBytes(32).toString('base64url');
@@ -58,15 +65,15 @@ export async function createSession(userId:string){
  return {token,expiresAt};
 }
 
-export function accountFromRow(row:{id:string;email:string;displayName:string;handicap:string|null;preferences:AccountPreferences|null}):Account{
- return {id:row.id,email:row.email,displayName:row.displayName,handicap:Number(row.handicap??0),preferences:{...defaultAccountPreferences,...(row.preferences??{})}};
+export function accountFromRow(row:{id:string;email:string;displayName:string;emailVerifiedAt?:Date|null;emailVerified?:boolean;handicap:string|null;preferences:AccountPreferences|null}):Account{
+ return {id:row.id,email:row.email,displayName:row.displayName,emailVerified:row.emailVerified??Boolean(row.emailVerifiedAt),handicap:Number(row.handicap??0),preferences:{...defaultAccountPreferences,...(row.preferences??{})}};
 }
 
 export async function currentAccount():Promise<Account|null>{
  const token=(await cookies()).get(SESSION_COOKIE)?.value;
  if(!token)return null;
  const now=new Date();
- const rows=await database().select({id:users.id,email:users.email,displayName:users.displayName,handicap:userProfiles.handicap,preferences:userProfiles.preferences})
+ const rows=await database().select({id:users.id,email:users.email,displayName:users.displayName,emailVerifiedAt:users.emailVerifiedAt,handicap:userProfiles.handicap,preferences:userProfiles.preferences})
   .from(sessions)
   .innerJoin(users,eq(sessions.userId,users.id))
   .leftJoin(userProfiles,eq(userProfiles.userId,users.id))

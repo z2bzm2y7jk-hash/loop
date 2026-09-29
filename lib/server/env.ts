@@ -10,6 +10,12 @@ const serverEnvironmentSchema=z.object({
  DB_PASSWORD:z.string().min(1).optional(),
  AUTH_SECRET:z.string().min(32).optional(),
  APP_ORIGIN:z.string().url().default('http://localhost:3000'),
+ SMTP_HOST:z.string().min(1).optional(),
+ SMTP_PORT:z.coerce.number().int().positive().optional(),
+ SMTP_USER:z.string().min(1).optional(),
+ SMTP_PASSWORD:z.string().min(1).optional(),
+ SMTP_FROM:z.string().min(1).optional(),
+ SUPPORT_EMAIL:z.string().email().optional(),
  NODE_ENV:z.enum(['development','test','production']).default('development'),
 });
 
@@ -23,6 +29,12 @@ export function serverEnvironment(){
   DB_PASSWORD:process.env.DB_PASSWORD,
   AUTH_SECRET:process.env.AUTH_SECRET,
   APP_ORIGIN:process.env.APP_ORIGIN,
+  SMTP_HOST:process.env.SMTP_HOST,
+  SMTP_PORT:process.env.SMTP_PORT,
+  SMTP_USER:process.env.SMTP_USER,
+  SMTP_PASSWORD:process.env.SMTP_PASSWORD,
+  SMTP_FROM:process.env.SMTP_FROM,
+  SUPPORT_EMAIL:process.env.SUPPORT_EMAIL,
   NODE_ENV:process.env.NODE_ENV,
  });
 }

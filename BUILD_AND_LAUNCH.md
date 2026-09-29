@@ -18,7 +18,7 @@ These are product hypotheses, not proven advantages. Validate them with golfers 
 
 The Next.js web app now has 14 games, including Nine Point and Split Sixes for three-player rounds, editable stakes, hole-level Wolf/Hammer/Vegas decisions, course and tee lookup, scorecard export, scoring, settlement, early-round cancellation, live shared scorecards, shared weekly events, group/trip concepts, and a mobile interface. A plain-language Help & How-To center teaches first-time golfers how to set up, score, share, correct, export and install the web app on a phone. Weekly-event links support view or organizer access, roster identity claims, pre-round lineup changes, one live scorecard per playing group, activity history and combined-money results. Ninety automated tests cover game engines, flexible rules, discovery, course data, exports, lifecycle decisions, and round and weekly-event synchronization contracts. Account data, shared-round revisions and weekly-event snapshots are stored in the hosted database.
 
-The production foundation is now separate from that public prototype: a standalone Node.js build for Hostinger, a pooled MariaDB/MySQL connection, environment validation, health checks, repeatable migrations, a 24-table schema, immutable round and weekly-event snapshots, append-only revision history, hashed invite/session storage, idempotency keys, and revision-based conflict rules. Shared rounds and weekly events use these server capabilities; broader local-data migration and the offline queue remain.
+The production foundation is now separate from that public prototype: a standalone Node.js build for Hostinger, a pooled MariaDB/MySQL connection, environment validation, health checks, repeatable migrations, a 27-table schema, immutable round and weekly-event snapshots, append-only revision history, hashed invite/session/recovery storage, saved support requests, idempotency keys, and revision-based conflict rules. Shared rounds and weekly events use these server capabilities; broader local-data migration and the offline queue remain.
 
 ## Release sequence
 
@@ -32,7 +32,7 @@ Build a hosted HTTPS mobile web beta first so a golfer can open it by link witho
 4. Make the round usable with weak service on a course; test airplane-mode recovery and refresh on real phones.
 5. Test the five most important games—Skins, Nassau, Wolf, Vegas, and Greenies—against real paper scorecards and the group's agreed rules. Mark other formats as beta until checked.
 6. Add privacy-conscious error reporting and event counts. Never send names, wager values, or payout amounts into product analytics.
-7. Publish a short privacy policy and support contact before external testing. Conduct a market-specific legal and app-policy review of wager accounting in parallel.
+7. Connect the Hostinger SMTP mailbox to the prepared recovery, verification, and support delivery adapter. Conduct a market-specific legal and app-policy review of wager accounting in parallel.
 
 **Exit test:** 15–20 real groups each complete at least one round; no unexplained payout discrepancy or lost round; at least 80% of started pilot rounds finish; the captain can enter four scores for a hole in about 10 seconds; participants can explain the final settlement from the ledger. These are proposed decision thresholds, not industry benchmarks.
 

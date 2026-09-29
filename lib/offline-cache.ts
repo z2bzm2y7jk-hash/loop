@@ -23,5 +23,5 @@ export function writeOfflineSnapshot(storage:StorageLike,accountId:string,snapsh
 }
 
 export function rememberOfflineAccount(storage:StorageLike,account:Account){try{storage.setItem('loop-last-account',JSON.stringify(account));return true}catch{return false}}
-export function readOfflineAccount(storage:StorageLike):Account|null{try{const value=JSON.parse(storage.getItem('loop-last-account')??'null') as Account|null;return value?.id&&value.email&&value.displayName?value:null}catch{return null}}
+export function readOfflineAccount(storage:StorageLike):Account|null{try{const value=JSON.parse(storage.getItem('loop-last-account')??'null') as Account|null;return value?.id&&value.email&&value.displayName?{...value,emailVerified:value.emailVerified===true}:null}catch{return null}}
 export function clearOfflineAccount(storage:StorageLike,accountId:string){try{storage.removeItem(`loop-cache-${accountId}`);storage.removeItem('loop-last-account')}catch{}}

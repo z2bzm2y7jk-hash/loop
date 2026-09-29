@@ -16,7 +16,9 @@ npm run db:check
 npm run build
 ```
 
-Open the local URL reported by `npm run dev` (normally http://localhost:3000). The shared beta requires an account and a configured MariaDB/MySQL database. The production branch includes secure sessions, hashed passwords, per-account cloud saves, validated environment configuration, pooled database connections, repeatable migrations, and a deployment health endpoint.
+Open the local URL reported by `npm run dev` (normally http://localhost:3000). The shared beta requires an account and a configured MariaDB/MySQL database. The production branch includes secure sessions, hashed passwords, per-account cloud saves, time-limited recovery and verification tokens, self-service account deletion, saved support requests, validated environment configuration, pooled database connections, repeatable migrations, and a deployment health endpoint.
+
+Password reset and email verification use SMTP when `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM` are configured. `SUPPORT_EMAIL` receives a copy of new support requests; the database remains the source of record. When SMTP is not configured, Loop clearly directs locked-out beta users to the support form instead of claiming an email was sent.
 
 ## A round in the prototype
 
@@ -37,6 +39,7 @@ Enter whole-stroke scores with the large +/- controls, then save each hole. Wolf
 - **House Rules:** save, play, edit, duplicate, and delete configurations. The Game Creator preview composes supported games and bonuses into a saved House Rule.
 - **Trips:** Myrtle Beach 2027 demo has 12 golfers, three days, nine calculated foursome rounds, standings and net settlement. Create a local trip, define round plans, and attach a completed round.
 - **Profile:** player records, best partner, toughest opponent, favorite game and head-to-head rivalries.
+- **Account safety:** email verification status, password change and recovery, a public support form, and permanent self-service account deletion with anonymous shared-score retention.
 - **Help & how-to:** plain-language, step-by-step guidance for setup, scoring, shared groups, bets, corrections, exports, adding Loop to a phone’s Home Screen, saving a reusable home game, and running a regular group as captain.
 - **Membership:** all 14 games are unlocked during private beta. Optional secure checkout links can be configured later for Game Captain and Trip Captain plans.
 
@@ -59,7 +62,7 @@ Live sharing creates an expiring round link. Captain scoring is the recommended 
 - `lib/simulation.ts`, `lib/demo-tools.ts`: handicap-weighted demo scores and deliberate test events.
 - `components/*`: guided Caddie, configuration, discovery, group/trip pages and recap.
 - `lib/contracts/*`: validated, versioned requests for conflict-safe round synchronization.
-- `lib/server/*`: server-only environment checks, database pool, and the 19-table production schema.
+- `lib/server/*`: server-only environment checks, database pool, email delivery, account tokens, and the 27-table production schema.
 - `drizzle/*`: reviewed MariaDB/MySQL migration files.
 - `app/api/v1/health`: deployment and database readiness check.
 

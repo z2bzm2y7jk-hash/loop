@@ -21,7 +21,7 @@ export async function PATCH(request:Request){
    await tx.insert(userProfiles).values({userId:account.id,handicap:String(input.handicap),preferences:prefs}).onDuplicateKeyUpdate({set:{handicap:String(input.handicap),preferences:prefs}});
    await tx.update(players).set({displayName:input.displayName,handicap:String(input.handicap),color:prefs.color}).where(eq(players.linkedUserId,account.id));
   });
-  return NextResponse.json({account:accountFromRow({id:account.id,email:account.email,displayName:input.displayName,handicap:String(input.handicap),preferences:prefs})});
+  return NextResponse.json({account:accountFromRow({id:account.id,email:account.email,displayName:input.displayName,emailVerified:account.emailVerified,handicap:String(input.handicap),preferences:prefs})});
  }catch(error){
   if(error instanceof z.ZodError)return problem(error.issues[0]?.message??'Check your profile details.');
   console.error(JSON.stringify({event:'profile_update_failed'}));

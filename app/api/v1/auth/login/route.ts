@@ -12,7 +12,7 @@ export async function POST(request:Request){
  if(!allowAttempt(request,'login',10,15*60*1000))return problem('Too many attempts. Try again in a few minutes.',429);
  try{
   const input=schema.parse(await jsonBody(request,20_000));
-  const rows=await database().select({id:users.id,email:users.email,displayName:users.displayName,passwordHash:users.passwordHash,status:users.status,handicap:userProfiles.handicap,preferences:userProfiles.preferences})
+  const rows=await database().select({id:users.id,email:users.email,displayName:users.displayName,emailVerifiedAt:users.emailVerifiedAt,passwordHash:users.passwordHash,status:users.status,handicap:userProfiles.handicap,preferences:userProfiles.preferences})
    .from(users).leftJoin(userProfiles,eq(userProfiles.userId,users.id)).where(eq(users.email,input.email)).limit(1);
   const user=rows[0];
   if(!user||user.status!=='active'||!await verifyPassword(input.password,user.passwordHash))return problem('Email or password is incorrect.',401);
