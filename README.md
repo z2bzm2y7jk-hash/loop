@@ -18,7 +18,7 @@ npm run build
 
 Open the local URL reported by `npm run dev` (normally http://localhost:3000). The shared beta requires an account and a configured MariaDB/MySQL database. The production branch includes secure sessions, hashed passwords, per-account cloud saves, time-limited recovery and verification tokens, self-service account deletion, saved support requests, validated environment configuration, pooled database connections, repeatable migrations, and a deployment health endpoint.
 
-Password reset and email verification use SMTP when `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM` are configured. `SUPPORT_EMAIL` receives a copy of new support requests; the database remains the source of record. When SMTP is not configured, Round Settled clearly directs locked-out beta users to the support form instead of claiming an email was sent.
+Password reset and email verification use SMTP when `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM` are configured. Email verification is disabled for private testing unless `EMAIL_VERIFICATION_ENABLED=true`; testers can create an account and use the app immediately. `SUPPORT_EMAIL` receives a copy of new support requests; the database remains the source of record. When SMTP is not configured, Round Settled clearly directs locked-out beta users to the support form instead of claiming an email was sent.
 
 ## A round in the prototype
 

@@ -6,6 +6,7 @@ import {accountFromRow,createSession,database,hashPassword,sessionCookie} from '
 import {groupMembers,groups,players,userAppData,userProfiles,users} from '@/lib/server/db/schema';
 import {allowAttempt,jsonBody,problem,validRequestOrigin} from '@/lib/server/http';
 import {issueEmailVerification} from '@/lib/server/account-tokens';
+import {serverEnvironment} from '@/lib/server/env';
 
 const schema=z.object({
  email:z.string().trim().toLowerCase().email().max(254),
@@ -32,7 +33,9 @@ export async function POST(request:Request){
    await tx.insert(userAppData).values({userId,activeRound:null,history:[],productData});
   });
   const created=await createSession(userId);
-  try{await issueEmailVerification({userId,email:input.email,displayName:input.displayName})}catch{console.error(JSON.stringify({event:'registration_verification_email_failed'}))}
+  if(serverEnvironment().EMAIL_VERIFICATION_ENABLED){
+   try{await issueEmailVerification({userId,email:input.email,displayName:input.displayName})}catch{console.error(JSON.stringify({event:'registration_verification_email_failed'}))}
+  }
   const response=NextResponse.json({account:accountFromRow({id:userId,email:input.email,displayName:input.displayName,emailVerifiedAt:null,handicap:String(input.handicap),preferences})},{status:201});
   response.cookies.set(sessionCookie(created.token,created.expiresAt));
   return response;

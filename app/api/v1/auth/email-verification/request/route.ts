@@ -3,9 +3,11 @@ import {currentAccount} from '@/lib/server/auth';
 import {issueEmailVerification} from '@/lib/server/account-tokens';
 import {emailDeliveryReady} from '@/lib/server/email';
 import {allowAttempt,problem,validRequestOrigin} from '@/lib/server/http';
+import {serverEnvironment} from '@/lib/server/env';
 
 export async function POST(request:Request){
  if(!validRequestOrigin(request))return problem('Request origin was rejected.',403);
+ if(!serverEnvironment().EMAIL_VERIFICATION_ENABLED)return NextResponse.json({ok:true,delivery:'disabled'});
  if(!allowAttempt(request,'email-verification-request',4,30*60*1000))return problem('Too many requests. Try again later.',429);
  const account=await currentAccount();
  if(!account)return problem('Sign in required.',401);

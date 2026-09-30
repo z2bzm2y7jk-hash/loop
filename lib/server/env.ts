@@ -15,6 +15,7 @@ const serverEnvironmentSchema=z.object({
  SMTP_USER:z.string().min(1).optional(),
  SMTP_PASSWORD:z.string().min(1).optional(),
  SMTP_FROM:z.string().min(1).optional(),
+ EMAIL_VERIFICATION_ENABLED:z.enum(['true','false']).default('false').transform(value=>value==='true'),
  SUPPORT_EMAIL:z.string().email().optional(),
  NODE_ENV:z.enum(['development','test','production']).default('development'),
 });
@@ -34,6 +35,7 @@ export function serverEnvironment(){
   SMTP_USER:process.env.SMTP_USER,
   SMTP_PASSWORD:process.env.SMTP_PASSWORD,
   SMTP_FROM:process.env.SMTP_FROM,
+  EMAIL_VERIFICATION_ENABLED:process.env.EMAIL_VERIFICATION_ENABLED,
   SUPPORT_EMAIL:process.env.SUPPORT_EMAIL,
   NODE_ENV:process.env.NODE_ENV,
  });
