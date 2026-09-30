@@ -1,4 +1,4 @@
-# Loop production architecture
+# Round Settled production architecture
 
 ## Selected stack
 
@@ -118,7 +118,7 @@ The local browser cache is a resilience layer, not the permanent source of truth
 
 - HTTPS only, secure and HTTP-only session cookies, CSRF protection and strict same-site defaults
 - Passwords hashed with a memory-hard algorithm; password reset tokens hashed and short-lived
-- Database user limited to the Loop database and required privileges
+- Database user limited to the Round Settled database and required privileges
 - Parameterized queries through the database layer
 - Input validation at every HTTP boundary
 - Security headers, request-size limits and rate limiting

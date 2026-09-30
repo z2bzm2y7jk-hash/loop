@@ -2,7 +2,7 @@
 
 ## Positioning and differentiation
 
-Loop answers **“What are we playing today?”** for regular golf groups. Its loop is discover → agree on a game and values → score together → settle → remember the round. The advantage is the combination of Game Caddie, exposure planning, reusable House Rules, group memory, and trip management; calculation alone is not the product.
+Round Settled answers **“What are we playing today?”** for regular golf groups. Its loop is discover → agree on a game and values → score together → settle → remember the round. The advantage is the combination of Game Caddie, exposure planning, reusable House Rules, group memory, and trip management; calculation alone is not the product.
 
 The tone should feel like golfers talking to golfers: game, side game, value, exposure, round, group and settle up. Avoid sportsbook language and casino styling.
 

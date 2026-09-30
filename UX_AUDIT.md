@@ -1,4 +1,4 @@
-# Loop UI/UX audit
+# Round Settled UI/UX audit
 
 Updated: September 29, 2026  
 Methods: Impeccable technical review, UI/UX Pro Max design-system guidance, responsive inspection at 320 px, 390 px and 1440 px, source review, contrast measurement, accessibility-tree review and production-build evidence.
@@ -10,13 +10,13 @@ Methods: Impeccable technical review, UI/UX Pro Max design-system guidance, resp
 | Accessibility | 4/4 | Essential phone text now has a 16 px floor, contrast failures are corrected, account-mode controls expose state and skip navigation reaches the main content. |
 | Performance | 3/4 | The reviewed pages produce no browser errors and the production first load is 176 kB. The main app is still concentrated in one large client module. |
 | Responsive design | 4/4 | Public flows have no horizontal overflow at 320 px or 390 px, inputs avoid iOS zoom, legal pages are phone-first and controls honor safe areas. |
-| Theming | 2/4 | Loop has primitive, semantic and component tokens, but the stylesheet still contains repeated direct color values. The intentional light theme suits outdoor use. |
+| Theming | 2/4 | Round Settled has primitive, semantic and component tokens, but the stylesheet still contains repeated direct color values. The intentional light theme suits outdoor use. |
 | Implementation integrity | 4/4 | The interface remains product-specific, consistent and aligned with the clubhouse scorebook direction. |
 | **Total** | **17/20** | **Strong beta foundation. Offline launch and conflict recovery are the next priorities.** |
 
 ## Design direction
 
-Loop has a recognizable visual system, real golf-specific workflows, consistent Lucide icons, large score controls, clear saved/live states and product language tailored to golfers. UI/UX Pro Max suggested a vibrant gaming treatment during a broad pattern search; that does not fit Loop's users or on-course setting. The established clubhouse scorebook direction remains the product standard.
+Round Settled has a recognizable visual system, real golf-specific workflows, consistent Lucide icons, large score controls, clear saved/live states and product language tailored to golfers. UI/UX Pro Max suggested a vibrant gaming treatment during a broad pattern search; that does not fit Round Settled's users or on-course setting. The established clubhouse scorebook direction remains the product standard.
 
 ## Completed in this release
 
@@ -24,10 +24,10 @@ Loop has a recognizable visual system, real golf-specific workflows, consistent 
 - Corrected low-contrast signup fine print and scorecard table headings.
 - Added a keyboard-visible skip link and a focusable main-content target.
 - Replaced the incomplete auth tab pattern with a simple two-button mode switch using `aria-pressed`.
-- Added a public privacy policy describing the data Loop actually uses, group sharing, course-location search, storage, retention and current beta rights.
+- Added a public privacy policy describing the data Round Settled actually uses, group sharing, course-location search, storage, retention and current beta rights.
 - Added a public responsible-play guide and surfaced the current national helpline on signup and in Help.
 - Added permanent privacy and responsible-play links to signup, the home footer, Profile settings and Help.
-- Added phone-first recovery for weak service: Loop restores an unsynced local scorecard, keeps it ahead of an older server copy, retries when the connection returns and clears the device copy at sign-out.
+- Added phone-first recovery for weak service: Round Settled restores an unsynced local scorecard, keeps it ahead of an older server copy, retries when the connection returns and clears the device copy at sign-out.
 - Added hashed, expiring, single-use password-reset and email-verification links with an SMTP adapter ready for Hostinger mail.
 - Added a public support form that records every request even when email delivery is unavailable.
 - Added self-service account deletion with current-password confirmation, deliberate typed confirmation, sign-out cleanup and anonymous retention of shared score records.
@@ -40,7 +40,7 @@ Loop has a recognizable visual system, real golf-specific workflows, consistent 
 
 **Location:** `app/page.tsx`
 
-Loop now restores the last local snapshot, preserves unsynced edits, retries automatically when connectivity returns and explains when changes are only on the phone. The browser still needs a service worker to launch from a cold offline start, and shared-round conflicts need a dedicated review screen.
+Round Settled now restores the last local snapshot, preserves unsynced edits, retries automatically when connectivity returns and explains when changes are only on the phone. The browser still needs a service worker to launch from a cold offline start, and shared-round conflicts need a dedicated review screen.
 
 **Next change:** Add an app-shell service worker, show the last successful sync time and give captains a clear comparison screen when the server and phone both changed.
 

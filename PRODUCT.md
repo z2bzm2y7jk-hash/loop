@@ -1,4 +1,4 @@
-# Loop
+# Round Settled
 ## Platform
 Mobile-first web prototype, with a future iPhone application.
 ## Stack

@@ -4,13 +4,13 @@ export const dynamic = 'force-static';
 
 export default function manifest(): MetadataRoute.Manifest {
  return {
-  name:'Loop Golf',
-  short_name:'Loop',
+  name:'Round Settled',
+  short_name:'Round Settled',
   description:'Golf scoring, side games, and simple settlements.',
   start_url:'/',
   display:'standalone',
-  background_color:'#f7f8f2',
-  theme_color:'#203f33',
+  background_color:'#f7f1e7',
+  theme_color:'#17324a',
   orientation:'portrait',
   icons:[
    {src:'/icon-192.png',sizes:'192x192',type:'image/png'},

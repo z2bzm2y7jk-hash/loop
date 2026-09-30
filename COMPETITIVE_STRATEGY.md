@@ -1,10 +1,10 @@
-# Loop competitive strategy
+# Round Settled competitive strategy
 
 Research updated September 20, 2026. Product claims and prices change quickly; verify them quarterly before publishing comparisons.
 
 ## Decision
 
-Loop should not compete as another GPS, swing-analysis, or generic scorecard app. That market is mature and expensive to enter. Loop should own a narrower job:
+Round Settled should not compete as another GPS, swing-analysis, or generic scorecard app. That market is mature and expensive to enter. Round Settled should own a narrower job:
 
 > The trusted game operating system for a regular golf group: agree on the exact rules, score once, understand every dollar, and run it back next round.
 
@@ -12,16 +12,16 @@ The organizer is the buyer. Everyone else must be able to join as a guest, see t
 
 ## Market map
 
-| Product | Current position | Price signal | Strengths | Opening for Loop |
+| Product | Current position | Price signal | Strengths | Opening for Round Settled |
 | --- | --- | --- | --- | --- |
 | [BEEZER Golf](https://beezergolf.com/pricing) | Broad scorecard, GPS, stats and roughly 28 side games | $29.99/year | Game breadth, live score synchronization, GPS and watch support | Reviews still ask for deeper rule variants, clearer Nassau presentation, editable course data and smoother first-round setup |
-| [Stick Golf](https://stickapp.golf/) | Betting-first scorecard built around inspectable settlement math | $59.99/year, according to its published comparison | Deep game engines, hole-by-hole narration, multi-game stacking and strong test claims | iOS-first and currently focused on 12 formats; Loop must match its trust standard while winning on guest adoption, discovery, trips and portability |
+| [Stick Golf](https://stickapp.golf/) | Betting-first scorecard built around inspectable settlement math | $59.99/year, according to its published comparison | Deep game engines, hole-by-hole narration, multi-game stacking and strong test claims | iOS-first and currently focused on 12 formats; Round Settled must match its trust standard while winning on guest adoption, discovery, trips and portability |
 | [Skins App](https://skinsapp.com/) | Large game library and automatic settlement | $40/year in the App Store | Many formats, tutorials, live leaderboards and Troon distribution | Settings depth, group-specific rules, reliability and cross-app score portability remain meaningful battlegrounds |
-| [Golf GameBook](https://www.golfgamebook.com/gold-membership) | Social scoring, tournaments, GPS and many formats | €59.99/year | Established network, tournaments up to 72 players, watch and GPS support | Heavier all-in-one product; Loop can make the first tee and settlement flows much faster for a recurring foursome |
-| [18Birdies](https://18birdies.com/premium/) | Full golf super-app with GPS, coaching, stats and side games | $99.99/year | Scale, course coverage, GPS, AI and strong consumer awareness | Side games compete for attention with many other tools; Loop can be the neutral game layer for golfers who use different golf apps |
+| [Golf GameBook](https://www.golfgamebook.com/gold-membership) | Social scoring, tournaments, GPS and many formats | €59.99/year | Established network, tournaments up to 72 players, watch and GPS support | Heavier all-in-one product; Round Settled can make the first tee and settlement flows much faster for a recurring foursome |
+| [18Birdies](https://18birdies.com/premium/) | Full golf super-app with GPS, coaching, stats and side games | $99.99/year | Scale, course coverage, GPS, AI and strong consumer awareness | Side games compete for attention with many other tools; Round Settled can be the neutral game layer for golfers who use different golf apps |
 | [TheGrint](https://thegrint.com/) | Handicap, social network, GPS and scoring | $59.99/year | Handicap workflows, social graph, stats and score posting | Side-game depth and exact house-rule settlement are not the primary product promise |
-| [Golfshot](https://golfshot.com/facts-about-golfshot) | GPS, watch, shot tracking, scoring and GHIN posting | $79.99/year | Mature GPS/watch experience and handicap posting | Advanced game support is secondary and paid; Loop can coexist rather than replace it |
-| Emerging betting-first apps | GolfBet, Birdie Bank, MatchRoom, Press Golf, SideAction Saloon, Wicket Wagers, Tee Up and others | Free to early paid plans | Rapid feature expansion: custom bets, trips, observers, scorecard scanning and social feeds | Speed alone is not defensible. Loop needs verifiable rules, excellent guest adoption, offline resilience and a group memory that compounds over time |
+| [Golfshot](https://golfshot.com/facts-about-golfshot) | GPS, watch, shot tracking, scoring and GHIN posting | $79.99/year | Mature GPS/watch experience and handicap posting | Advanced game support is secondary and paid; Round Settled can coexist rather than replace it |
+| Emerging betting-first apps | GolfBet, Birdie Bank, MatchRoom, Press Golf, SideAction Saloon, Wicket Wagers, Tee Up and others | Free to early paid plans | Rapid feature expansion: custom bets, trips, observers, scorecard scanning and social feeds | Speed alone is not defensible. Round Settled needs verifiable rules, excellent guest adoption, offline resilience and a group memory that compounds over time |
 
 Competitor pricing sources: [BEEZER](https://beezergolf.com/pricing), [Golf GameBook](https://www.golfgamebook.com/gold-membership), [18Birdies](https://18birdies.com/premium/), [TheGrint](https://thegrint.com/), [Golfshot](https://golfshot.com/facts-about-golfshot), and the [Skins App Store listing](https://apps.apple.com/us/app/skins-app/id6447497626).
 
@@ -33,17 +33,17 @@ Recurring themes in current product reviews and golfer discussions:
 2. **House rules matter more than the game name.** “Wolf,” “Nassau,” and “Skins” are families of rules. Presses, validation, steals, carryovers, handicaps and multipliers vary by group.
 3. **Trust fails on edge cases.** A polished total is useless if golfers cannot see which hole, press, carryover or decision produced it.
 4. **Weak reception is normal.** A round cannot disappear or lock up because the course has poor cellular service.
-5. **Double entry blocks adoption.** Many golfers already post elsewhere for GPS, statistics or handicap. Loop must export cleanly and pursue approved integrations.
+5. **Double entry blocks adoption.** Many golfers already post elsewhere for GPS, statistics or handicap. Round Settled must export cleanly and pursue approved integrations.
 6. **The first tee is time-sensitive.** Setup must take about a minute, and returning groups should begin from a saved template in seconds.
 7. **Trip formats exceed ordinary scorecards.** Mixed group sizes, combined rounds, side contests and rotating teams still send golfers back to spreadsheets.
 
 Useful research threads include golfers asking for [guest players without forcing another account](https://www.reddit.com/r/golf/comments/1viwt70/side_game_apps/), complex [multi-round trip formats](https://www.reddit.com/r/golf/comments/1savxfa/best_golf_app_for_guys_tripgames/), and the trust requirements of [inspectable calculations, offline reliability and simple invites](https://www.reddit.com/r/SideProject/comments/1w3h2c9/we_built_a_golf_sidegame_app_the_harder_problem/). Treat individual posts as qualitative signals rather than market-size evidence.
 
-## Defensible Loop position
+## Defensible Round Settled position
 
 ### 1. House Rules, not generic presets
 
-Every group can save a named, versioned configuration. Before the round, Loop explains the effective rules in plain language and estimates the exposure. Every completed round retains the exact rule version used, even after a template changes.
+Every group can save a named, versioned configuration. Before the round, Round Settled explains the effective rules in plain language and estimates the exposure. Every completed round retains the exact rule version used, even after a template changes.
 
 ### 2. A visible rules ledger
 
@@ -59,11 +59,11 @@ The active round is stored on the phone before the UI confirms a save. Changes q
 
 ### 5. Neutral score portability
 
-Loop does not try to replace every GPS, watch or official-handicap product. It exports a complete scorecard, course/tee data and round summary. Approved integrations and scorecard import reduce duplicate entry over time.
+Round Settled does not try to replace every GPS, watch or official-handicap product. It exports a complete scorecard, course/tee data and round summary. Approved integrations and scorecard import reduce duplicate entry over time.
 
 ### 6. Game Caddie and exposure guardrails
 
-Loop already recommends compatible games from player count, holes, vibe and maximum exposure. This is a meaningful differentiator if recommendations use the group's history and clearly disclose the modeled range before the first tee.
+Round Settled already recommends compatible games from player count, holes, vibe and maximum exposure. This is a meaningful differentiator if recommendations use the group's history and clearly disclose the modeled range before the first tee.
 
 ### 7. The group's season, not an individual stat warehouse
 
@@ -71,10 +71,10 @@ Rivalries, partners, house rules, trips, records and “run it back” flows mak
 
 ## Product boundaries
 
-- Loop records informal accounting. It does not hold funds, transmit wagers, take a percentage of wagers or act as a sportsbook.
+- Round Settled records informal accounting. It does not hold funds, transmit wagers, take a percentage of wagers or act as a sportsbook.
 - No advertising inside an active round.
 - No requirement that every player subscribe.
-- No claim that a Loop handicap is an official Handicap Index.
+- No claim that a Round Settled handicap is an official Handicap Index.
 - No broad GPS or swing-analysis build until the trusted-round product has repeat use.
 
 ## Revenue model to test
@@ -89,7 +89,7 @@ Pricing is a hypothesis for interviews and private beta, not a public commitment
 - Scorecard export and transparent settlement
 - No ads during play
 
-### Loop Group — target $39.99/year or $5.99/month
+### Round Settled Group — target $39.99/year or $5.99/month
 
 - One paying organizer, unlimited invited guests
 - Unlimited rounds

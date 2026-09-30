@@ -1,6 +1,6 @@
-# Loop game rules and settings
+# Round Settled game rules and settings
 
-These are Loop's disclosed house rules for the prototype. Golf groups use variants; agree on settings and hole decisions before playing. Every amount is scorekeeping and settlement calculation only. Loop does not hold or transfer money.
+These are Round Settled's disclosed house rules for the prototype. Golf groups use variants; agree on settings and hole decisions before playing. Every amount is scorekeeping and settlement calculation only. Round Settled does not hold or transfer money.
 
 ## Shared conventions
 
@@ -28,14 +28,14 @@ These are Loop's disclosed house rules for the prototype. Golf groups use varian
 
 ## Exposure planning
 
-Game Caddie models projected and possible per-player exposure using the configured base values, hole count, presses and multipliers. It recommends settings within a selected target and shows when a changed combination could exceed it. This is a conservative planning estimate, **not a hard cap**. A Wolf per-hole value override, a new mix of side games, or edited rules can raise the eventual amount. Loop does not enforce a player loss limit.
+Game Caddie models projected and possible per-player exposure using the configured base values, hole count, presses and multipliers. It recommends settings within a selected target and shows when a changed combination could exceed it. This is a conservative planning estimate, **not a hard cap**. A Wolf per-hole value override, a new mix of side games, or edited rules can raise the eventual amount. Round Settled does not enforce a player loss limit.
 
 ## Where choices come from
 
-[Golf Digest's Wolf guide](https://www.golfdigest.com/story/golf-game-wolf-betting-gambling-explained) describes rotating Wolf, partner selection and Lone/Blind variants, and says points and money should be agreed on by the group. Loop exposes multipliers and ties rather than assuming one universal schedule.
+[Golf Digest's Wolf guide](https://www.golfdigest.com/story/golf-game-wolf-betting-gambling-explained) describes rotating Wolf, partner selection and Lone/Blind variants, and says points and money should be agreed on by the group. Round Settled exposes multipliers and ties rather than assuming one universal schedule.
 
-[Golf Digest's Hammer guide](https://www.golfdigest.com/story/golf-betting-game-hammer-jordan-spieth-justin-thomas-netflix-full-swing) describes alternating doubles and birdie options. Loop records each offer and response to keep its settlement explainable.
+[Golf Digest's Hammer guide](https://www.golfdigest.com/story/golf-betting-game-hammer-jordan-spieth-justin-thomas-netflix-full-swing) describes alternating doubles and birdie options. Round Settled records each offer and response to keep its settlement explainable.
 
-[Golf Digest's Vegas guide](https://www.golfdigest.com/story/how-to-play-vegas-golf-betting-games-explained) describes point stakes and many variants. Loop uses an explicit concatenated-score team variant and configurable birdie flips. The game library and setup show the selected variant.
+[Golf Digest's Vegas guide](https://www.golfdigest.com/story/how-to-play-vegas-golf-betting-games-explained) describes point stakes and many variants. Round Settled uses an explicit concatenated-score team variant and configurable birdie flips. The game library and setup show the selected variant.
 
 The game library remains concise on the phone; this document records the exact accounting assumptions for review and further development.

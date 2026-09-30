@@ -1,8 +1,8 @@
-# Loop: build and launch plan
+# Round Settled: build and launch plan
 
 ## Product promise
 
-**The fastest way for a golf group to agree on a game, keep score, and understand the result.** Loop's focus is flexible house rules, quick hole entry, and a payout ledger every player can check. It records group accounting; it does not hold, move, or collect money.
+**The fastest way for a golf group to agree on a game, keep score, and understand the result.** Round Settled's focus is flexible house rules, quick hole entry, and a payout ledger every player can check. It records group accounting; it does not hold, move, or collect money.
 
 The first customer is the person who organizes a regular foursome or golf trip. The group is the unit of adoption: one organizer starts a round, everyone can see the rules and result, and they return together for the next outing.
 
@@ -10,7 +10,7 @@ The first customer is the person who organizes a regular foursome or golf trip. 
 
 - The U.S. had 29.1 million on-course golfers in 2025, according to the [National Golf Foundation](https://www.ngf.org/the-clubhouse/golf-industry-research/). This is a large market, but the relevant early segment is recurring social groups that play side games.
 - [18Birdies](https://18birdies.com/clubhouse/golf-games/track-your-golf-games-on-the-course-with-18birdies) already offers group scoring and games including Wolf, Nassau, Vegas, and Skins. [Golf GameBook](https://www.golfgamebook.com/) offers many formats and live scoring. Calculation alone is not a differentiator.
-- Loop should win a narrower job: set up a group's exact house rules in a minute, enter scores in seconds, and make every cent of the final ledger explainable. The random-game picker makes discovering a new game part of the experience.
+- Round Settled should win a narrower job: set up a group's exact house rules in a minute, enter scores in seconds, and make every cent of the final ledger explainable. The random-game picker makes discovering a new game part of the experience.
 
 These are product hypotheses, not proven advantages. Validate them with golfers before investing in broad distribution.
 
@@ -50,7 +50,7 @@ Open self-serve access only after group return behavior is visible. A Home Scree
 
 ## Distribution: make each round introduce the next group
 
-1. **Founding groups:** recruit 15–20 recurring foursomes and trip organizers directly. Sit with them through setup and settlement. Ask which rule or payout they argued about and whether they would use Loop at their next outing.
+1. **Founding groups:** recruit 15–20 recurring foursomes and trip organizers directly. Sit with them through setup and settlement. Ask which rule or payout they argued about and whether they would use Round Settled at their next outing.
 2. **Built-in invitation:** the captain shares one round link before tee-off; other golfers view rules and live status without a forced signup. At the end, each receives a recap and a clear way to start a new group round. This is the primary growth loop.
 3. **Useful owned content:** publish concise, accurate “How to play” pages and calculators for Wolf, Vegas, Nassau, and Skins, linked to the relevant setup flow. The existing game library is the seed, but each page must explain regional variants and the app's selected house rules.
 4. **Borrowed audiences:** demonstrate a real round with local league organizers, golf-trip planners, club pros, and golf creators. Give them a group-specific template or demo rather than a generic ad.

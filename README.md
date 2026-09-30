@@ -1,6 +1,6 @@
-# Loop
+# Round Settled
 
-**The golf game operating system that helps groups decide what to play, run the game, track the action, and settle up.** Loop is a mobile-first web application moving from a local prototype to a private shared-round beta. It tracks side games and payments owed; it never collects wagers, holds money, transfers funds, or takes a percentage.
+**The golf game operating system that helps groups decide what to play, run the game, track the action, and settle up.** Round Settled is a mobile-first web application moving from a local prototype to a private shared-round beta. It tracks side games and payments owed; it never collects wagers, holds money, transfers funds, or takes a percentage.
 
 ## Run and verify
 
@@ -18,7 +18,7 @@ npm run build
 
 Open the local URL reported by `npm run dev` (normally http://localhost:3000). The shared beta requires an account and a configured MariaDB/MySQL database. The production branch includes secure sessions, hashed passwords, per-account cloud saves, time-limited recovery and verification tokens, self-service account deletion, saved support requests, validated environment configuration, pooled database connections, repeatable migrations, and a deployment health endpoint.
 
-Password reset and email verification use SMTP when `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM` are configured. `SUPPORT_EMAIL` receives a copy of new support requests; the database remains the source of record. When SMTP is not configured, Loop clearly directs locked-out beta users to the support form instead of claiming an email was sent.
+Password reset and email verification use SMTP when `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM` are configured. `SUPPORT_EMAIL` receives a copy of new support requests; the database remains the source of record. When SMTP is not configured, Round Settled clearly directs locked-out beta users to the support form instead of claiming an email was sent.
 
 ## A round in the prototype
 
@@ -40,10 +40,10 @@ Enter whole-stroke scores with the large +/- controls, then save each hole. Wolf
 - **Trips:** Myrtle Beach 2027 demo has 12 golfers, three days, nine calculated foursome rounds, standings and net settlement. Create a local trip, define round plans, and attach a completed round.
 - **Profile:** player records, best partner, toughest opponent, favorite game and head-to-head rivalries.
 - **Account safety:** email verification status, password change and recovery, a public support form, and permanent self-service account deletion with anonymous shared-score retention.
-- **Help & how-to:** plain-language, step-by-step guidance for setup, scoring, shared groups, bets, corrections, exports, adding Loop to a phone’s Home Screen, saving a reusable home game, and running a regular group as captain.
+- **Help & how-to:** plain-language, step-by-step guidance for setup, scoring, shared groups, bets, corrections, exports, adding Round Settled to a phone’s Home Screen, saving a reusable home game, and running a regular group as captain.
 - **Membership:** all 14 games are unlocked during private beta. Optional secure checkout links can be configured later for Game Captain and Trip Captain plans.
 
-Account preferences, the active round, completed history, House Rules, groups and trips persist in the user’s online account. A small browser cache supports recovery if a save is interrupted. Paid flags record settlement status only; Loop never moves wager money.
+Account preferences, the active round, completed history, House Rules, groups and trips persist in the user’s online account. A small browser cache supports recovery if a save is interrupted. Paid flags record settlement status only; Round Settled never moves wager money.
 
 An active round receives the first position on Home with hole progress, live balances, and direct Continue, Share, and End Round actions. Ending early requires a reason and an explicit group decision: save the partial score and current bet balances to history, or discard the round so it contributes nothing to records or stats.
 

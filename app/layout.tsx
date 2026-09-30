@@ -13,7 +13,7 @@ export const viewport: Viewport = {
  width:'device-width',
  initialScale:1,
  viewportFit:'cover',
- themeColor:'#203f33',
+ themeColor:'#17324a',
  colorScheme:'light',
 };
 export default function Layout({children}:{children:React.ReactNode}) { return <html lang="en"><body><a className="skip-link" href="#main-content">Skip to main content</a>{children}</body></html> }
