@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 :root{
- --forest-950:#17324a;--forest-900:#17324a;--forest-700:#17324a;--sage-600:#496476;--sage-300:#cfe0e7;--sage-200:#6f8997;--sage-100:#edf3f5;--cream-50:#f7f1e7;--white:#fff;--clay-700:#a84f35;--lime-200:#cfe0e7;
+ --forest-950:#17324a;--forest-900:#17324a;--forest-700:#17324a;--sage-600:#334e60;--sage-300:#cfe0e7;--sage-200:#6f8997;--sage-100:#edf3f5;--cream-50:#f7f1e7;--white:#fff;--clay-700:#a84f35;--lime-200:#cfe0e7;
  --brand-navy:#17324a;--brand-orange:#d9633a;--brand-sky:#bcd7e5;--brand-ivory:#f7f1e7;
  --surface-canvas:var(--cream-50);--surface-raised:var(--white);--surface-soft:var(--sage-100);--text-strong:var(--forest-900);--text-muted:var(--sage-600);--border-default:var(--sage-200);--border-subtle:#a9bac2;--action-primary:var(--forest-950);--action-focus:var(--brand-orange);--status-positive:#2f6943;--status-negative:#a84f35;
  --control-min:44px;--radius-control:8px;--radius-card:14px;--shadow-raised:0 12px 34px rgba(23,50,74,.09);--mobile-nav-height:72px;
@@ -544,4 +544,31 @@ input,select,textarea,.password-field,.color-input{border-color:var(--border-def
  .round-row strong,.continue strong,.score-player>strong,.payment strong{font-size:14px}
  .round-row small,.continue small,.game-select small,.review-players small,.library-card small,.complete-banner small,.score-relative,.total-so-far,.legend{font-size:12px}
  .steps span,.player-labels,.location,.hole-heading>div>span,.active-round-status{font-size:11px}
+}
+
+/* Phone legibility: small supporting copy uses a darker ink and a sturdier
+   weight so it remains readable on ivory and pale-blue surfaces outdoors. */
+small,.muted,.fine{font-weight:500}
+.greeting p{font-size:14px;font-weight:500}
+.hero p{color:#edf3f5;font-size:13px;font-weight:500}
+.home-start-direct{color:#fff;font-size:13px;font-weight:600}
+.hero-bottom{color:#edf3f5;font-size:11px;font-weight:600}
+.season-money>.muted{font-size:13px;font-weight:500}
+.season-money>.positive{font-size:12px;font-weight:600}
+.season-stats span{font-size:13px;font-weight:500}
+.continue small,.home-help-card small,.library-banner small{font-size:13px;font-weight:500;line-height:1.5}
+.continue>span:not(.grow),.text-button{font-size:12px;font-weight:600}
+footer{font-size:12px;font-weight:500;line-height:1.5}
+.footer-links a{font-weight:600}
+.bottom-nav>button{font-size:12px;font-weight:700}
+
+@media(max-width:760px){
+ .greeting p{font-size:14px;line-height:1.55}
+ .hero p{font-size:13px;line-height:1.65}
+ .season-money>.muted,.season-stats span{font-size:13px}
+ .season-money>.positive{font-size:11px;line-height:1.45}
+ .continue strong{font-size:15px}
+ .continue small,.home-help-card small,.library-banner small{font-size:13px}
+ footer:not(.legal-footer){font-size:12px;line-height:1.6}
+ .bottom-nav>button{font-size:12px}
 }
