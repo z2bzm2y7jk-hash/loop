@@ -6,7 +6,8 @@ import {sharedRoundOpenForScoring,type CourseSnapshot,type HolePayload,type Roun
 import {defaultCourseTee} from '@/lib/course';
 import type {Config,Hole,Round} from '@/lib/types';
 import {database,hashGroupEventInviteToken,hashRoundInviteToken} from './auth';
-import {groupEventInvites,groupEvents,holeResults,holeRevisions,roundGames,roundInvites,roundPlayers,rounds,userProfiles,users} from './db/schema';
+import type {SharedActor} from './guest-auth';
+import {groupEventInvites,groupEvents,guestSessions,holeResults,holeRevisions,roundGames,roundInvites,roundPlayers,rounds,userProfiles,users} from './db/schema';
 
 type InviteScope='view'|'score'|'captain';
 type StoredConfig=Config&{__loop?:{presses:Round['presses'];paid:string[];date:string;started:boolean;groupId?:string;groupEventId?:string;groupPodId?:string}};
@@ -50,11 +51,11 @@ export async function createSharedRound(account:Account,round:Round,scope:'view'
  return {roundId:round.id,token,scope,revision:round.results.length};
 }
 
-export async function authorizeSharedRound(roundId:string,accountId:string,token?:string|null){
+export async function authorizeSharedRound(roundId:string,actor:SharedActor,token?:string|null){
  const db=database();
  const row=await db.select().from(rounds).where(eq(rounds.id,roundId)).limit(1);
  if(!row[0])return null;
- if(row[0].createdByUserId===accountId){
+ if(actor.kind==='account'&&row[0].createdByUserId===actor.id){
   let inviteScope:InviteScope='view';
   if(token){const invite=await db.select({scope:roundInvites.scope}).from(roundInvites).where(and(eq(roundInvites.roundId,roundId),eq(roundInvites.tokenHash,hashRoundInviteToken(token)),gt(roundInvites.expiresAt,new Date()),isNull(roundInvites.revokedAt))).limit(1);inviteScope=invite[0]?.scope??'view'}
   return {round:row[0],scope:inviteScope,role:'captain' as const,canEdit:true};
@@ -64,36 +65,36 @@ export async function authorizeSharedRound(roundId:string,accountId:string,token
  if(invite[0])return {round:row[0],scope:invite[0].scope,role:invite[0].scope==='view'?'viewer' as const:'editor' as const,canEdit:invite[0].scope!=='view'};
  const eventInvite=await db.select({scope:groupEventInvites.scope,event:groupEvents.snapshot,owner:groupEvents.createdByUserId}).from(groupEventInvites).innerJoin(groupEvents,eq(groupEventInvites.eventId,groupEvents.id)).where(and(eq(groupEventInvites.tokenHash,hashGroupEventInviteToken(token)),gt(groupEventInvites.expiresAt,new Date()),isNull(groupEventInvites.revokedAt),isNull(groupEvents.deletedAt))).limit(1),sharedEvent=eventInvite[0];
  if(!sharedEvent||!sharedEvent.event.event.pods.some(pod=>pod.linkedRoundId===roundId))return null;
- if(sharedEvent.owner===accountId)return {round:row[0],scope:'score' as const,role:'captain' as const,canEdit:true};
+ if(actor.kind==='account'&&sharedEvent.owner===actor.id)return {round:row[0],scope:'score' as const,role:'captain' as const,canEdit:true};
  return {round:row[0],scope:sharedEvent.scope==='organize'?'score' as const:'view' as const,role:sharedEvent.scope==='organize'?'editor' as const:'viewer' as const,canEdit:sharedEvent.scope==='organize'};
 }
 
-export async function readSharedRound(roundId:string,accountId:string,token?:string|null):Promise<SharedRoundResponse|null>{
- const access=await authorizeSharedRound(roundId,accountId,token);
+export async function readSharedRound(roundId:string,actor:SharedActor,token?:string|null):Promise<SharedRoundResponse|null>{
+ const access=await authorizeSharedRound(roundId,actor,token);
  if(!access)return null;
  const db=database();
  const [playerRows,gameRows,resultRows,activityRows]=await Promise.all([
   db.select().from(roundPlayers).where(eq(roundPlayers.roundId,roundId)).orderBy(asc(roundPlayers.seatIndex)),
   db.select().from(roundGames).where(eq(roundGames.roundId,roundId)).orderBy(asc(roundGames.position)),
   db.select().from(holeResults).where(eq(holeResults.roundId,roundId)).orderBy(asc(holeResults.holeNumber)),
-  db.select({revision:holeRevisions.revision,holeNumber:holeRevisions.holeNumber,editorName:users.displayName,preferences:userProfiles.preferences,savedAt:holeRevisions.savedAt}).from(holeRevisions).leftJoin(users,eq(holeRevisions.savedByUserId,users.id)).leftJoin(userProfiles,eq(holeRevisions.savedByUserId,userProfiles.userId)).where(eq(holeRevisions.roundId,roundId)).orderBy(desc(holeRevisions.revision)).limit(12),
+  db.select({revision:holeRevisions.revision,holeNumber:holeRevisions.holeNumber,editorName:users.displayName,preferences:userProfiles.preferences,guestName:guestSessions.displayName,guestColor:guestSessions.color,savedAt:holeRevisions.savedAt}).from(holeRevisions).leftJoin(users,eq(holeRevisions.savedByUserId,users.id)).leftJoin(userProfiles,eq(holeRevisions.savedByUserId,userProfiles.userId)).leftJoin(guestSessions,eq(holeRevisions.savedByGuestId,guestSessions.id)).where(eq(holeRevisions.roundId,roundId)).orderBy(desc(holeRevisions.revision)).limit(12),
  ]);
  const snapshot=access.round.courseSnapshot,stored=(gameRows[0]?.config??{}) as StoredConfig,loop=stored.__loop;
  const {__loop:ignored,...config}=stored;void ignored;
  const source=snapshot.provider==='opengolf'?'opengolf':snapshot.provider==='manual'?'manual':'demo';
  const round:Round={id:access.round.id,course:snapshot.courseName,holes:access.round.holes,players:playerRows.map(row=>({id:row.playerId??row.linkedUserId??`${roundId}-${row.seatIndex}`,name:row.displayName,handicap:Number(row.handicap),color:row.color})),games:gameRows.map(row=>row.gameKey as Round['games'][number]),config:config as Config,results:resultRows.map(row=>holeFromPayload(row.payload)),presses:loop?.presses??[],paid:loop?.paid??[],date:loop?.date??access.round.playedOn.toISOString(),started:loop?.started??access.round.status!=='draft',ended:snapshot.ended,groupId:loop?.groupId,groupEventId:loop?.groupEventId,groupPodId:loop?.groupPodId,tee:{name:snapshot.teeName,location:snapshot.location,courseRating:snapshot.courseRating,slopeRating:snapshot.slopeRating,pars:snapshot.pars,strokeIndexes:snapshot.strokeIndexes,source,providerCourseId:snapshot.providerCourseId,gender:snapshot.gender,yardage:snapshot.yardage,attribution:snapshot.attribution}};
- const activity:RoundActivity[]=activityRows.map(row=>({revision:row.revision,holeNumber:row.holeNumber,editorName:row.editorName??'A player',editorColor:row.preferences?.color??'#d9e4d2',savedAt:row.savedAt.toISOString()}));
+ const activity:RoundActivity[]=activityRows.map(row=>({revision:row.revision,holeNumber:row.holeNumber,editorName:row.editorName??row.guestName??'A player',editorColor:row.preferences?.color??row.guestColor??'#d9e4d2',savedAt:row.savedAt.toISOString()}));
  return {round,revision:access.round.revision,status:access.round.status,role:access.role,scope:access.scope==='view'?'view':'score',canEdit:access.canEdit,activity};
 }
 
-export async function saveSharedHole(account:Account,token:string|null,roundId:string,holeNumber:number,expectedRevision:number,commandId:string,round:Round){
- const access=await authorizeSharedRound(roundId,account.id,token);
+export async function saveSharedHole(actor:SharedActor,token:string|null,roundId:string,holeNumber:number,expectedRevision:number,commandId:string,round:Round){
+ const access=await authorizeSharedRound(roundId,actor,token);
  if(!access||!access.canEdit)return {kind:'forbidden' as const};
  if(!sharedRoundOpenForScoring(access.round.status))return {kind:'closed' as const};
  const db=database();
  const duplicate=await db.select({revision:holeRevisions.revision}).from(holeRevisions).where(eq(holeRevisions.commandId,commandId)).limit(1);
  if(duplicate[0])return {kind:'ok' as const,revision:duplicate[0].revision};
- if(access.round.revision!==expectedRevision)return {kind:'conflict' as const,current:await readSharedRound(roundId,account.id,token)};
+ if(access.round.revision!==expectedRevision)return {kind:'conflict' as const,current:await readSharedRound(roundId,actor,token)};
  const revision=expectedRevision+1,hole=round.results[holeNumber-1],payload=holePayload(hole),savedAt=new Date(),savedConfig=storedConfig(round);
  try{
   await db.transaction(async tx=>{
@@ -101,18 +102,19 @@ export async function saveSharedHole(account:Account,token:string|null,roundId:s
    if(((updated[0] as {affectedRows?:number}).affectedRows??0)!==1)throw new Error('ROUND_CONFLICT');
    await tx.delete(roundGames).where(eq(roundGames.roundId,roundId));
    await tx.insert(roundGames).values(round.games.map((game,position)=>({id:randomUUID(),roundId,position,gameKey:game,rulesVersion:1,config:savedConfig as unknown as Record<string,unknown>})));
-   await tx.insert(holeResults).values({roundId,holeNumber,revision,payload,savedByUserId:account.id,savedAt}).onDuplicateKeyUpdate({set:{revision,payload,savedByUserId:account.id,savedAt}});
-   await tx.insert(holeRevisions).values({roundId,holeNumber,revision,commandId,payload,savedByUserId:account.id,savedAt});
+   const editor=actor.kind==='account'?{savedByUserId:actor.id,savedByGuestId:null}:{savedByUserId:null,savedByGuestId:actor.id};
+   await tx.insert(holeResults).values({roundId,holeNumber,revision,payload,...editor,savedAt}).onDuplicateKeyUpdate({set:{revision,payload,...editor,savedAt}});
+   await tx.insert(holeRevisions).values({roundId,holeNumber,revision,commandId,payload,...editor,savedAt});
   });
- }catch(error){if(error instanceof Error&&error.message==='ROUND_CONFLICT')return {kind:'conflict' as const,current:await readSharedRound(roundId,account.id,token)};throw error}
+ }catch(error){if(error instanceof Error&&error.message==='ROUND_CONFLICT')return {kind:'conflict' as const,current:await readSharedRound(roundId,actor,token)};throw error}
  return {kind:'ok' as const,revision};
 }
 
-export async function cancelSharedRound(account:Account,token:string|null,roundId:string,expectedRevision:number,reason:string,keepBets:boolean){
- const access=await authorizeSharedRound(roundId,account.id,token);
+export async function cancelSharedRound(actor:SharedActor,token:string|null,roundId:string,expectedRevision:number,reason:string,keepBets:boolean){
+ const access=await authorizeSharedRound(roundId,actor,token);
  if(!access||access.role!=='captain')return {kind:'forbidden' as const};
- if(access.round.revision!==expectedRevision)return {kind:'conflict' as const,current:await readSharedRound(roundId,account.id,token)};
- const current=await readSharedRound(roundId,account.id,token);if(!current)return {kind:'forbidden' as const};
+ if(access.round.revision!==expectedRevision)return {kind:'conflict' as const,current:await readSharedRound(roundId,actor,token)};
+ const current=await readSharedRound(roundId,actor,token);if(!current)return {kind:'forbidden' as const};
  const ended={kind:'cancelled' as const,reason,keepBets:keepBets&&current.round.results.length>0,endedAt:new Date().toISOString(),holesPlayed:current.round.results.length};
  await database().update(rounds).set({status:'archived',revision:expectedRevision+1,courseSnapshot:{...access.round.courseSnapshot,ended}}).where(and(eq(rounds.id,roundId),eq(rounds.revision,expectedRevision)));
  return {kind:'ok' as const,revision:expectedRevision+1,ended};

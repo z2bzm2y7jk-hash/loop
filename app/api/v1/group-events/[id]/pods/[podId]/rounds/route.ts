@@ -1,7 +1,7 @@
 import {NextResponse} from 'next/server';
 import {ZodError,z} from 'zod';
 import {sharedRoundSchema} from '@/lib/contracts/round-sync';
-import {currentAccount} from '@/lib/server/auth';
+import {currentSharedActor} from '@/lib/server/guest-auth';
 import {jsonBody,problem,validRequestOrigin} from '@/lib/server/http';
 import {startSharedWeeklyPod} from '@/lib/server/shared-group-events';
 
@@ -9,10 +9,10 @@ const schema=z.object({round:sharedRoundSchema,scope:z.enum(['view','score']).de
 
 export async function POST(request:Request,{params}:{params:Promise<{id:string;podId:string}>}){
  if(!validRequestOrigin(request))return problem('Request origin was rejected.',403);
- const account=await currentAccount();if(!account)return problem('Sign in required.',401);
+ const actor=await currentSharedActor();if(!actor)return problem('Open the invitation and continue as a guest.',401);
  try{
   const [{id,podId},input]=await Promise.all([params,jsonBody(request).then(body=>schema.parse(body))]);
-  const result=await startSharedWeeklyPod(account,request.headers.get('x-loop-event-token'),id,podId,input.round,input.scope);
+  const result=await startSharedWeeklyPod(actor,request.headers.get('x-loop-event-token'),id,podId,input.round,input.scope);
   if(result.kind==='forbidden')return problem('Only a weekly-game organizer can start a playing group.',403);
   if(result.kind==='missing')return problem('That playing group no longer exists.',404);
   if(result.kind==='invalid')return problem(result.reason,400);

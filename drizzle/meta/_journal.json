@@ -43,6 +43,13 @@
       "when": 1790709517199,
       "tag": "0005_flippant_wolverine",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1790821867080,
+      "tag": "0006_good_frank_castle",
+      "breakpoints": true
     }
   ]
 }

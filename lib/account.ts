@@ -7,6 +7,7 @@ export type AccountPreferences={
 };
 
 export type Account={
+ kind?:'account'|'guest';
  id:string;
  email:string;
  displayName:string;

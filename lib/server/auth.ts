@@ -55,6 +55,10 @@ export function hashGroupEventInviteToken(token:string){
  return hashPurposeToken(token,'group-event-invite');
 }
 
+export function hashGuestSessionToken(token:string){
+ return hashPurposeToken(token,'guest-session');
+}
+
 export function hashPasswordResetToken(token:string){return hashPurposeToken(token,'password-reset')}
 export function hashEmailVerificationToken(token:string){return hashPurposeToken(token,'email-verification')}
 
@@ -66,7 +70,7 @@ export async function createSession(userId:string){
 }
 
 export function accountFromRow(row:{id:string;email:string;displayName:string;emailVerifiedAt?:Date|null;emailVerified?:boolean;handicap:string|null;preferences:AccountPreferences|null}):Account{
- return {id:row.id,email:row.email,displayName:row.displayName,emailVerified:row.emailVerified??Boolean(row.emailVerifiedAt),emailVerificationAvailable:serverEnvironment().EMAIL_VERIFICATION_ENABLED,handicap:Number(row.handicap??0),preferences:{...defaultAccountPreferences,...(row.preferences??{})}};
+ return {kind:'account',id:row.id,email:row.email,displayName:row.displayName,emailVerified:row.emailVerified??Boolean(row.emailVerifiedAt),emailVerificationAvailable:serverEnvironment().EMAIL_VERIFICATION_ENABLED,handicap:Number(row.handicap??0),preferences:{...defaultAccountPreferences,...(row.preferences??{})}};
 }
 
 export async function currentAccount():Promise<Account|null>{

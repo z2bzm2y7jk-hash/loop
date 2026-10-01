@@ -44,6 +44,16 @@ export const sessions=mysqlTable('sessions',{
  createdAt:createdAt(),
 },table=>[uniqueIndex('sessions_token_hash_unique').on(table.tokenHash),index('sessions_user_expires_idx').on(table.userId,table.expiresAt)]);
 
+export const guestSessions=mysqlTable('guest_sessions',{
+ id:id('id').primaryKey(),
+ displayName:varchar('display_name',{length:80}).notNull(),
+ color:varchar('color',{length:16}).notNull(),
+ tokenHash:varchar('token_hash',{length:64}).notNull(),
+ expiresAt:datetime('expires_at',{mode:'date'}).notNull(),
+ lastSeenAt:datetime('last_seen_at',{mode:'date'}).notNull(),
+ createdAt:createdAt(),
+},table=>[uniqueIndex('guest_sessions_token_hash_unique').on(table.tokenHash),index('guest_sessions_expires_idx').on(table.expiresAt)]);
+
 export const passwordResetTokens=mysqlTable('password_reset_tokens',{
  id:id('id').primaryKey(),
  userId:id('user_id').notNull().references(()=>users.id,{onDelete:'cascade'}),
@@ -200,6 +210,7 @@ export const groupEventRevisions=mysqlTable('group_event_revisions',{
  action:mysqlEnum('action',['created','lineup','status','round-linked','details']).notNull(),
  snapshot:json('snapshot').$type<SharedWeeklySnapshot>().notNull(),
  savedByUserId:id('saved_by_user_id').references(()=>users.id,{onDelete:'set null'}),
+ savedByGuestId:id('saved_by_guest_id').references(()=>guestSessions.id,{onDelete:'set null'}),
  savedAt:datetime('saved_at',{mode:'date'}).notNull(),
 },table=>[uniqueIndex('group_event_revisions_event_revision_unique').on(table.eventId,table.revision),index('group_event_revisions_event_idx').on(table.eventId)]);
 
@@ -209,6 +220,7 @@ export const holeResults=mysqlTable('hole_results',{
  revision:int('revision',{unsigned:true}).notNull(),
  payload:json('payload').$type<HolePayload>().notNull(),
  savedByUserId:id('saved_by_user_id').references(()=>users.id,{onDelete:'set null'}),
+ savedByGuestId:id('saved_by_guest_id').references(()=>guestSessions.id,{onDelete:'set null'}),
  savedAt:datetime('saved_at',{mode:'date'}).notNull(),
 },table=>[primaryKey({columns:[table.roundId,table.holeNumber]}),index('hole_results_round_revision_idx').on(table.roundId,table.revision)]);
 
@@ -220,8 +232,16 @@ export const holeRevisions=mysqlTable('hole_revisions',{
  commandId:varchar('command_id',{length:36}).notNull(),
  payload:json('payload').$type<HolePayload>().notNull(),
  savedByUserId:id('saved_by_user_id').references(()=>users.id,{onDelete:'set null'}),
+ savedByGuestId:id('saved_by_guest_id').references(()=>guestSessions.id,{onDelete:'set null'}),
  savedAt:datetime('saved_at',{mode:'date'}).notNull(),
 },table=>[uniqueIndex('hole_revisions_command_unique').on(table.commandId),uniqueIndex('hole_revisions_round_revision_unique').on(table.roundId,table.revision),index('hole_revisions_round_hole_idx').on(table.roundId,table.holeNumber)]);
+
+export const groupEventGuestClaims=mysqlTable('group_event_guest_claims',{
+ eventId:id('event_id').notNull().references(()=>groupEvents.id,{onDelete:'cascade'}),
+ guestSessionId:id('guest_session_id').notNull().references(()=>guestSessions.id,{onDelete:'cascade'}),
+ playerId:varchar('player_id',{length:80}).notNull(),
+ claimedAt:createdAt(),
+},table=>[primaryKey({columns:[table.eventId,table.guestSessionId]}),uniqueIndex('group_event_guest_claims_player_unique').on(table.eventId,table.playerId),index('group_event_guest_claims_guest_idx').on(table.guestSessionId)]);
 
 export const roundOutcomes=mysqlTable('round_outcomes',{
  roundId:id('round_id').primaryKey().references(()=>rounds.id,{onDelete:'cascade'}),
